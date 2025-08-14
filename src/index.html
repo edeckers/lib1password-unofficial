@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <title>How 1Password Works: An Interactive Explainer | BRANIE IT</title>
+    <meta name="theme-color" content="#231F20">
+    <meta name="geo.region" content="NL">
+    <meta name="geo.placename" content="Utrecht">
+    <meta name="geo.position" content="52.0930;5.1122">
+    <meta name="author" content="Ely Deckers - BRANIE IT" />
+    <meta name="description" content="Interactive explainer exploring 1Password's cryptographic architecture. See how Secret Keys, master passwords, and zero-knowledge encryption protect your data." />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <meta property="og:title" content="How 1Password Works: An Interactive Explainer" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:description" content="Interactive explainer exploring 1Password's cryptographic architecture. See how Secret Keys, master passwords, and zero-knowledge encryption protect your data." />
+    <meta property="og:url" content="https://passwords.projects.branie.it/" />
+    <meta property="og:site_name" content="1Password interactive explainer" />
+    <meta property="og:image" content="https://passwords.projects.branie.it/media/og-card-1password-explainer.png" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:type" content="website" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta property="twitter:image" content="https://passwords.projects.branie.it/media/og-card-1password-explainer.png" />
+    <meta property="twitter:title" content="How 1Password Works: An Interactive Explainer" />
+    <meta name="twitter:description" content="Interactive explainer exploring 1Password's cryptographic architecture. See how Secret Keys, master passwords, and zero-knowledge encryption protect your data.">
+    <meta property="twitter:domain" content="passwords.lgtm.it">
+    <meta property="twitter:url" content="https://passwords.lgtm.it">
+
+    <link rel="canonical" href="https://passwords.projects.branie.it/" />
+    <link rel="icon" href="/favicon.svg" />
+    <link rel="stylesheet" href="/css/input.css">
+
+    <script type="module" src="/js/analytics/matomo.js"></script>
+    <script type="module" src="/js/analytics/cookie-bar.js"></script>
+    <script type="module" src="/js/OnePasswordExplainer.js"></script>
+  </head>
+  <body class="bg-gray-50 min-h-screen">
+    <div class="container mx-auto px-4 py-8 max-w-4xl space-y-8">
+        <header class="text-center">
+            <h1 class="text-4xl font-bold text-gray-900 mb-4">
+                Inside 1Password's Security Model
+            </h1>
+            <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+                Explore the cryptographic process behind <strong>creating a secure 1Password account</strong> in this <strong>interactive explainer</strong>.
+                See how your master password and Secret Key work together to protect your data.
+            </p>
+        </header>
+        <div class="text-center text-gray-600 text-sm max-w-2xl mx-auto">
+            <p>This explainer uses <code class="text-xs bg-gray-100 px-2 py-0.5 rounded"><a href="https://github.com/edeckers/lib1password-unofficial" class="text-blue-600 hover:text-blue-800">@edeckers/lib1password-unofficial</a></code>, an implementation based on <a href="https://1passwordstatic.com/files/security/1password-white-paper.pdf" class="text-blue-600 hover:text-blue-800 hover:underline">1Password's Security Design white paper</a>. Everything runs in your browser; no data leaves your device.</p>
+        </div>
+        <div class="bg-white rounded-lg shadow-lg p-8">
+            <h2 class="text-2xl font-semibold text-gray-900 mb-6">Step 1: Create Your Account</h2>
+            <div class="pb-6"><p class="text-sm text-gray-600">ℹ️ <span class="italic">This is a simulation, no actual account will be created</span></p></div>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="space-y-6">
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
+                            Email Address
+                        </label>
+                        <input
+                            type="email"
+                            id="email"
+                            value="my@email.tld"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                            placeholder="Enter your email"
+                        >
+                    </div>
+                    <div>
+                        <label for="password" class="block text-sm font-medium text-gray-700 mb-2">
+                            Password
+                        </label>
+                        <input
+                            type="password"
+                            id="password"
+                            value="password123"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                            placeholder="Enter your master password"
+                        >
+                        <p class="text-sm text-gray-500 mt-2">
+                            This password never leaves your device and is never stored by 1Password
+                        </p>
+                    </div>
+                    <button
+                        id="createAccount"
+                        class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200 transform hover:scale-105"
+                    >
+                        Create Account & Generate Secret Key
+                    </button>
+                </div>
+                <div class="bg-blue-50 rounded-lg p-6">
+                    <h3 class="text-lg font-semibold text-blue-900 mb-3">What happens next?</h3>
+                    <ul class="space-y-2 text-sm text-blue-800">
+                        <li class="flex items-start">
+                            <span class="text-blue-600 mr-2">1.</span>
+                            A unique Secret Key is generated locally
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-blue-600 mr-2">2.</span>
+                            Your password is combined with the Secret Key
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-blue-600 mr-2">3.</span>
+                            Cryptographic keys are derived for encryption
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-blue-600 mr-2">4.</span>
+                            Your account is ready to store encrypted data
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div id="transition1" class="hidden text-center py-4">
+            <p class="text-gray-600 text-sm">The Secret Key that was just <a href="https://developer.mozilla.org/en-US/docs/Web/API/Crypto/getRandomValues" class="text-blue-600 hover:text-blue-800">generated</a> is the foundation of 1Password's security. The <strong>26-character random portion</strong>, with each character drawn from 31 (2^5) possible values consisting of uppercase letters and digits, provides <strong>just over 128 bits of entropy</strong> (26 × 5 bits) that never leaves your device. The remaining characters are the version prefix and account identifier.</p>
+        </div>
+        <div id="secretKeySection" class="bg-white rounded-lg shadow-lg p-8 hidden">
+            <h2 class="text-2xl font-semibold text-gray-900 mb-6">Anatomy of Your Secret Key</h2>
+            <div class="grid lg:grid-cols-2 gap-8">
+                <div>
+                    <div class="bg-gray-100 rounded-lg p-6 mb-6">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-3">Generated Secret Key</h3>
+                        <div class="font-mono text-sm bg-white p-4 rounded border break-all" id="secretKeyDisplay">
+                        </div>
+                        <p class="text-sm text-gray-600 mt-3">
+                            <strong>Important:</strong> Save this Secret Key securely. You'll need it to access your account.
+                        </p>
+                    </div>
+                    <div class="space-y-4" id="keyAnatomy">
+                    </div>
+                </div>
+                <div class="bg-green-50 rounded-lg p-6">
+                    <h3 class="text-lg font-semibold text-green-900 mb-4">Why the Secret Key Matters</h3>
+                    <div class="space-y-4 text-sm text-green-800">
+                        <div class="flex items-start">
+                            <div class="bg-green-200 rounded-full p-1 mr-3 mt-0.5">
+                                <svg class="w-3 h-3 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <strong>Extra Entropy:</strong> Adds 128 bits of randomness to your security, making brute force attacks computationally impossible
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="bg-green-200 rounded-full p-1 mr-3 mt-0.5">
+                                <svg class="w-3 h-3 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <strong>Device-Generated:</strong> Created locally on your device, never transmitted or stored by 1Password servers
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="bg-green-200 rounded-full p-1 mr-3 mt-0.5">
+                                <svg class="w-3 h-3 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <strong>Two-Factor Security:</strong> Even if someone knows your master password, they still need your Secret Key
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="bg-green-200 rounded-full p-1 mr-3 mt-0.5">
+                                <svg class="w-3 h-3 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <strong>Account Binding:</strong> Contains your unique account identifier, linking all your encrypted data
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="transition2" class="hidden text-center py-4">
+            <p class="text-gray-600 text-sm"> Your password and Secret Key are combined through <a href="https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/deriveKey#pbkdf2" class="text-blue-600 hover:text-blue-800">PBKDF2 (Password-Based Key Derivation Function)</a> with <strong>650,000 iterations</strong> to derive the Account Unlock Key (AUK). This intentionally slow process <strong>makes brute-force attacks computationally expensive</strong>: an attacker obtaining your encrypted data would need to perform 650,000 cryptographic operations for every password guess, turning a millisecond attack into hours or days of computation per attempt.</p>
+        </div>
+        <div id="keyDerivationSection" class="bg-white rounded-lg shadow-lg p-8 hidden">
+            <h2 class="text-2xl font-semibold text-gray-900 mb-6">Step 2: Derive the Account Unlock Key</h2>
+            <div class="space-y-6">
+                <div class="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Key Derivation Process</h3>
+                    <div class="space-y-4" id="keyDerivationFlow">
+                        <div class="flex flex-col lg:flex-row items-center justify-center space-y-4 lg:space-y-0 lg:space-x-4">
+                            <div class="bg-white rounded-lg p-4 shadow border-2 border-blue-200 min-w-[200px] text-center">
+                                <div class="text-sm font-medium text-gray-700">Password</div>
+                                <div class="text-xs text-gray-500 mt-1">User Input</div>
+                                <div class="text-xs font-mono bg-gray-100 p-1 rounded mt-2" id="passwordPreview">••••••••••••</div>
+                            </div>
+                            <div class="text-2xl text-gray-400">+</div>
+                            <div class="bg-white rounded-lg p-4 shadow border-2 border-purple-200 min-w-[200px] text-center">
+                                <div class="text-sm font-medium text-gray-700">Secret Key</div>
+                                <div class="text-xs text-gray-500 mt-1">Device Generated</div>
+                                <div class="text-xs font-mono bg-gray-100 p-1 rounded mt-2" id="secretKeyPreview">A3-••••••-••••••</div>
+                            </div>
+                        </div>
+                        <div class="flex justify-center">
+                            <div class="text-2xl text-gray-400">↓ PBKDF2</div>
+                        </div>
+                        <div class="flex justify-center">
+                            <div class="bg-green-100 rounded-lg p-4 shadow border-2 border-green-300 min-w-[250px] text-center">
+                                <div class="text-sm font-medium text-green-800">Account Unlock Key (AUK)</div>
+                                <div class="text-xs text-green-600 mt-1">Derived via PBKDF2</div>
+                                <div class="text-xs font-mono bg-white p-2 rounded mt-2" id="aukPreview">Click "Derive Account Unlock Key" to generate</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex flex-col items-center space-y-4">
+                    <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 max-w-md text-center">
+                        <p id="pbkdf2-parameters" class="text-sm text-yellow-800">
+                            <strong>PBKDF2 Parameters:</strong> 650,000 iterations with random salt
+                        </p>
+                        <p class="text-xs text-yellow-600 mt-1">
+                            This makes brute force attacks computationally expensive
+                        </p>
+                    </div>
+                    <button id="deriveKeysBtn" class="bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors transform hover:scale-105">
+                        Derive Account Unlock Key
+                    </button>
+                </div>
+                <div id="derivationMetrics" class="hidden">
+                </div>
+            </div>
+        </div>
+        <div id="transition3" class="hidden text-center py-4">
+            <p class="text-gray-600 text-sm">The Account Unlock Key now decrypts your <strong>symmetric master password</strong>, which in turn protects your <strong>asymmetric master keypair</strong>. By encrypting copies of vault keys with an individual's public key, secure vault access can be granted to multiple users. This secure sharing of the vault key <strong>enables items to be shared between users</strong> without exposing the key itself.</p>
+        </div>
+        <div id="accountCreationSection" class="bg-white rounded-lg shadow-lg p-8 hidden">
+            <h2 class="text-2xl font-semibold text-gray-900 mb-6">Step 3: Generate Keysets and Your Personal Vault</h2>
+            <div class="bg-purple-50 border border-purple-200 rounded-lg p-4 mb-6">
+                <h3 class="text-lg font-semibold text-purple-900 mb-2">The Full Account Creation Process</h3>
+                <p class="text-sm text-purple-800">
+                    This step generates your complete key hierarchy and personal vault. Each encryption layer protects the next, creating 1Password's defense-in-depth security model.
+                </p>
+            </div>
+            <div class="bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg p-6 mb-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Cryptographic Key Hierarchy</h3>
+                <div class="space-y-4" id="keyHierarchy">
+                    <div class="flex justify-center">
+                        <div class="bg-green-100 rounded-lg p-4 shadow border-2 border-green-300 min-w-[250px] text-center">
+                            <div class="text-sm font-medium text-green-800">Account Unlock Key (AUK)</div>
+                            <div class="text-xs text-green-600 mt-1">✓ Already derived from password + Secret Key</div>
+                        </div>
+                    </div>
+                    <div class="flex justify-center">
+                        <div class="text-2xl text-gray-400">↓ encrypts</div>
+                    </div>
+                    <div class="flex justify-center">
+                        <div class="bg-purple-100 rounded-lg p-4 shadow border-2 border-purple-300 min-w-[200px] text-center">
+                            <div class="text-sm font-medium text-purple-800">Master Password (mp)</div>
+                            <div class="text-xs text-purple-600 mt-1">Randomly generated 256-bit symmetric key</div>
+                            <div class="text-xs text-purple-600 mt-1">for encrypting asymmetric Master keys</div>
+                            <div class="text-xs font-mono bg-white p-2 rounded mt-2" id="mpPreview">...</div>
+                        </div>
+                     </div>
+                    <div class="flex justify-center">
+                        <div class="text-2xl text-gray-400">↓ encrypts</div>
+                    </div>
+                     <div class="flex flex-col lg:flex-row items-center justify-center space-y-4 lg:space-y-0 lg:space-x-4">
+                        <div class="bg-blue-100 rounded-lg p-4 shadow border-2 border-blue-300 min-w-[200px] text-center">
+                            <div class="text-sm font-medium text-blue-800">Master Public Key</div>
+                            <div class="text-xs text-blue-600 mt-1">Randomly generated RSA-2048</div>
+                            <div class="text-xs text-blue-600 mt-1">for encrypting vault keys</div>
+                            <div class="text-xs font-mono bg-white p-2 rounded mt-2" id="publicKeyPreview">...</div>
+                        </div>
+                        <div class="text-lg text-gray-400">+</div>
+                        <div class="bg-red-100 rounded-lg p-4 shadow border-2 border-red-300 min-w-[200px] text-center">
+                            <div class="text-sm font-medium text-red-800">Master Private Key</div>
+                            <div class="text-xs text-red-600 mt-1">Randomly generated RSA-2048</div>
+                            <div class="text-xs text-red-600 mt-1">for encrypting vault keys</div>
+                            <div class="text-xs font-mono bg-white p-2 rounded mt-2" id="privateKeyPreview">...</div>
+                        </div>
+                    </div>
+                    <div class="flex justify-center">
+                        <div class="text-2xl text-gray-400">↓ encrypts</div>
+                    </div>
+                    <div class="flex justify-center">
+                        <div class="bg-yellow-100 rounded-lg p-4 shadow border-2 border-yellow-300 min-w-[250px] text-center">
+                            <div class="text-sm font-medium text-yellow-800">Personal Vault Access Key</div>
+                            <div class="text-xs text-yellow-600 mt-1">Randomly generated 256-bit symmetric key</div>
+                            <div class="text-xs text-yellow-600 mt-1">for encrypting your actual data</div>
+                            <div class="text-xs font-mono bg-white p-2 rounded mt-2" id="vaultKeyPreview">...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-blue-50 border-blue-200 rounded-lg p-6 mb-6 space-y-6 text-blue-800">
+                <p class="text-sm">
+                    Your account is <strong>created and encrypted locally</strong>, then <strong>sent to 1Password's servers</strong> for storage; they never see your encryption keys or plaintext data:
+                </p>
+                <div class="grid md:grid-cols-2 gap-4 text-sm">
+                    <div>
+                        <p class="font-semibold mb-2">Sent to Server:</p>
+                        <ul class="space-y-1">
+                            <li>• Your email address</li>
+                            <li>• Encrypted master password (encrypted with AUK)</li>
+                            <li>• Encrypted private key (encrypted with mp)</li>
+                            <li>• Public key (unencrypted, it's public)</li>
+                            <li>• Encrypted vault data</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <p class="font-semibold mb-2">Never Leaves Your Device:</p>
+                        <ul class="space-y-1">
+                            <li>• Your master password (plaintext)</li>
+                            <li>• Your Secret Key</li>
+                            <li>• Account Unlock Key (AUK)</li>
+                            <li>• Private key (plaintext)</li>
+                            <li>• Any decrypted vault data</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="mb-6" id="accountProgress">
+            </div>
+            <div class="flex justify-center">
+                <button id="completeAccountBtn" class="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold py-3 px-8 rounded-lg transition-all transform hover:scale-105 shadow-lg">
+                    Generate Keysets and Your Personal Vault
+                </button>
+            </div>
+            <div id="accountSummary" class="hidden mt-8">
+            </div>
+        </div>
+
+
+        <div id="transition4" class="hidden text-center py-4">
+            <p class="text-gray-600 text-sm">Your account is now ready with its complete key hierarchy. Let's put it to use and encrypt a vault item to see how <a href="https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/encrypt#aes-gcm" class="text-blue-600 hover:text-blue-800">AES-256-GCM authenticated encryption</a> protects your data. Each item is <strong>encrypted independently</strong> with its <strong>own initialization vector</strong>, ensuring 
+    that even identical passwords produce different ciphertext.</p>
+        </div>
+        <div id="vaultItemSection" class="bg-white rounded-lg shadow-lg p-8 hidden">
+            <h2 class="text-2xl font-semibold text-gray-900 mb-6">Step 4: Vault Item Encryption</h2>
+            <div class="bg-indigo-50 border border-indigo-200 rounded-lg p-4 mb-6">
+                <h3 class="text-lg font-semibold text-indigo-900 mb-2">Data Encryption in Action</h3>
+                <p class="text-sm text-indigo-800">
+                    Now let's see how your actual passwords and sensitive data get encrypted and stored.
+                    You'll see the <strong>actual encrypted bytes</strong> that would be stored in your vault.
+                </p>
+            </div>
+            <div class="grid lg:grid-cols-2 gap-8 mb-8">
+                <div class="bg-gray-50 rounded-lg p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Create a Sample Login Item</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <label for="itemTitle" class="block text-sm font-medium text-gray-700 mb-1">Title</label>
+                            <input type="text" id="itemTitle" value="GitHub Login"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                        </div>
+                        <div>
+                            <label for="itemUsername" class="block text-sm font-medium text-gray-700 mb-1">Username</label>
+                            <input type="text" id="itemUsername" value="john@example.com"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                        </div>
+                        <div>
+                            <label for="itemPassword" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                            <input type="password" id="itemPassword" value="MySecretPassword123!"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                        </div>
+                        <div>
+                            <label for="itemUrl" class="block text-sm font-medium text-gray-700 mb-1">URL</label>
+                            <input type="url" id="itemUrl" value="https://github.com/login"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                        </div>
+                        <div>
+                            <label for="itemNotes" class="block text-sm font-medium text-gray-700 mb-1">Notes</label>
+                            <textarea id="itemNotes" rows="2" placeholder="Optional notes..."
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-transparent">Work account for development projects</textarea>
+                        </div>
+                    </div>
+                    <button id="encryptItemBtn" class="w-full mt-4 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-md transition-colors">
+                        Encrypt & Store Item
+                    </button>
+                </div>
+                <div class="space-y-6">
+                    <div class="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-lg p-6">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-4">Encryption Process</h3>
+                        <div class="space-y-4" id="encryptionFlow">
+                            <div class="bg-white rounded-lg p-4 border-2 border-gray-200">
+                                <div class="text-sm font-medium text-gray-700 mb-2">1. Original Data (Plaintext)</div>
+                                <div class="text-xs font-mono bg-gray-100 p-2 rounded" id="plaintextPreview">
+                                    Click "Encrypt & Store Item" to see data
+                                </div>
+                            </div>
+                            <div class="bg-white rounded-lg p-4 border-2 border-yellow-200">
+                                <div class="text-sm font-medium text-yellow-700 mb-2">2. Vault Key (AES-256)</div>
+                                <p class="text-sm text-gray-600 mb-2">The Vault Key encrypts your actual passwords and items. It's protected by the Master Keyset, creating a two-layer security system. Each vault has its own key.</p>
+                                <div class="text-xs font-mono bg-yellow-50 p-2 rounded break-all" id="vaultKeyUsed">
+                                    Vault key will be shown here
+                                </div>
+                            </div>
+                            <div class="flex justify-center">
+                                <div class="text-xl text-gray-400">↓ AES-256-GCM</div>
+                            </div>
+                            <div class="bg-white rounded-lg p-4 border-2 border-red-200">
+                                <div class="text-sm font-medium text-red-700 mb-2">3. Encrypted Data (Ciphertext)</div>
+                                <div class="text-xs font-mono bg-red-50 p-2 rounded break-all" id="ciphertextPreview">
+                                    Encrypted data will appear here
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="storedItemDisplay" class="hidden">
+            </div>
+        </div>
+        <div id="transition5" class="hidden text-center py-4">
+
+            <p class="text-gray-600 text-sm"><p class="text-gray-600 text-sm">Your data is now encrypted with <a href="https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/encrypt#aes-gcm" class="text-blue-600 hover:text-blue-800">AES-256-GCM</a>, transformed into ciphertext that only your vault key can unlock. Let's reverse the process and decrypt it to retrieve the original data. The <a href="https://en.wikipedia.org/wiki/Galois/Counter_Mode" class="text-blue-600 hover:text-blue-800">GCM mode's</a> authentication ensures that any <strong>tampering</strong> with the encrypted data <strong>will be detected</strong>; decryption will fail if even a single bit has been modified.</p>
+        </div>
+        <div id="decryptionSection" class="bg-white rounded-lg shadow-lg p-8 hidden space-y-4">
+            <h2 class="text-2xl font-semibold text-gray-900 mb-6">Step 5: Vault Item Decryption</h2>
+            <div class="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-lg p-6 mb-6">
+                
+                    <div class="space-y-4 mb-6">
+
+                    <div class="space-y-4">
+                        <div class="flex justify-center">
+                            <div class="bg-yellow-100 rounded-lg p-4 shadow border-2 border-yellow-300 min-w-[250px] text-center">
+                                <div class="text-sm font-medium text-yellow-800">Encrypted Vault Item</div>
+                                <div class="text-xs text-yellow-600 mt-1">Ciphertext + Authentication Tag</div>
+                            </div>
+                        </div>
+                        <div class="flex justify-center">
+                            <div class="text-2xl text-gray-400">↓ decrypted with</div>
+                        </div>
+                        <div class="flex justify-center">
+                            <div class="bg-purple-100 rounded-lg p-4 shadow border-2 border-purple-300 min-w-[250px] text-center">
+                                <div class="text-sm font-medium text-purple-800">Vault Key</div>
+                                <div class="text-xs text-purple-600 mt-1">AES-256 symmetric key</div>
+                            </div>
+                        </div>
+                        <div class="flex justify-center">
+                            <div class="text-2xl text-gray-400">↓ produces</div>
+                        </div>
+                        <div class="flex justify-center">
+                            <div class="bg-green-100 rounded-lg p-4 shadow border-2 border-green-300 min-w-[250px] text-center">
+                                <div class="text-sm font-medium text-green-800">Decrypted Data</div>
+                                <div class="text-xs text-green-600 mt-1">Your original plaintext</div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+            </div>
+            <div class="flex justify-center">
+                <button id="decryptItemBtn" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-md transition-colors">
+                    Decrypt Stored Item
+                </button>
+                </div>
+            <div id="decryptedResult" class="hidden">
+            </div>
+        </div>
+    </div>
+    <footer class="mt-16 pt-8 pb-4 border-t border-gray-200 text-center">
+      <p class="text-sm text-gray-600 max-w-2xl mx-auto">
+          While the 1Password Team greenlit publication of this explainer and its underlying library, neither is an official product developed or maintained by AgileBits, Inc.
+      </p>
+      <div class="flex justify-center mt-8 mb-4">
+        <a href="https://github.com/edeckers/lib1password-unofficial"
+           class="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors">
+          <svg class="w-5 h-5"><use href="/media/github.svg#github-icon" /></svg>
+          View Source
+        </a>
+      </div>
+    </footer>
+  </body>
+</html>

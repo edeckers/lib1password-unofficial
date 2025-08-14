@@ -1,0 +1,30 @@
+{
+  "name": "1password-unofficial-page",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "format": "prettier --check \"src/**/*.{ts,tsx,json,md}\" \"*.{json,md}\"",
+    "format:fix": "prettier --write \"src/**/*.{ts,tsx,json,md}\" \"*.{json,md}\"",
+    "lint": "eslint src --ext .ts,.tsx",
+    "lint:fix": "eslint src --ext .ts,.tsx --fix",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4",
+    "@typescript-eslint/eslint-plugin": "^8",
+    "eslint": "^9",
+    "eslint-config-prettier": "^10",
+    "eslint-plugin-prettier": "^5",
+    "prettier": "^3",
+    "tailwindcss": "^4",
+    "typescript": "^5",
+    "vite": "^7"
+  },
+  "dependencies": {
+    "@edeckers/lib1password-unofficial": "*",
+    "vanilla-cookieconsent": "^3"
+  },
+  "private": true
+}

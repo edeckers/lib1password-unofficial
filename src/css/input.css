@@ -1,0 +1,20 @@
+@import "tailwindcss";
+
+/* Importing the cookie consent CSS from node_modules, instead
+   of referencing directly from .html bc it doesn't resolve at
+   dev time then */
+@import "../../node_modules/vanilla-cookieconsent/dist/cookieconsent.css";
+
+@layer components {
+  .animate-fade-in {
+    animation: fadeIn 0.5s ease-in-out;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.5s ease-out;
+  }
+
+  button {
+    @apply cursor-pointer;
+  }
+}

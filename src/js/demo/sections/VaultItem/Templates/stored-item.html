@@ -1,0 +1,27 @@
+<div class="bg-blue-50 border border-blue-200 rounded-lg p-6">
+    <div class="grid md:grid-cols-2 gap-6">
+        <div>
+            <h4 class="font-semibold text-blue-800 mb-2">Item Metadata</h4>
+            <div class="space-y-2 text-sm text-blue-700">
+                <div><strong>Item ID:</strong> <code data-field="itemId"></code></div>
+                <div><strong>Encryption:</strong> <span data-field="encAlgorithm"></span></div>
+                <div><strong>IV Length:</strong> <span data-field="ivLength"></span> bytes</div>
+                <div><strong>Encrypted Size:</strong> <span data-field="encryptedSize"></span> bytes</div>
+            </div>
+        </div>
+
+        <div>
+            <h4 class="font-semibold text-blue-800 mb-2">Storage Format</h4>
+            <div class="text-xs font-mono bg-white p-3 rounded border break-all" data-field="storageFormat">
+                
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-4">
+        <h4 class="font-semibold text-blue-800 mb-2">Raw Encrypted Data</h4>
+        <div class="text-xs font-mono bg-blue-100 p-3 rounded border break-all max-h-32 overflow-y-auto" data-field="rawEncryptedData">
+            
+        </div>
+    </div>
+</div>
