@@ -1,0 +1,94 @@
+{
+  "name": "@edeckers/lib1password-unofficial",
+  "version": "0.0.0",
+  "license": "MPL-2.0",
+  "description": "Unofficial TypeScript implementation of 1Password's security model based on their white paper",
+  "author": {
+    "name": "Ely Deckers",
+    "email": "raw.blade6685@fastmail.com",
+    "url": "https://github.com/edeckers"
+  },
+  "keywords": [
+    "1password",
+    "aes-256",
+    "cryptography",
+    "encryption",
+    "password-manager",
+    "pbkdf2",
+    "security"
+  ],
+  "exports": {
+    ".": {
+      "import": "./dist/index.esm.js",
+      "require": "./dist/index.cjs",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "sideEffects": false,
+  "main": "dist/index.cjs",
+  "source": "src/index.ts",
+  "module": "dist/index.esm.js",
+  "types": "dist/index.d.ts",
+  "type": "module",
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "rollup -c rollup.config.js",
+    "build:watch": "tsc -p tsconfig.build.json --watch",
+    "clean": "rm -rf dist",
+    "dev": "npm run build:watch",
+    "format": "prettier --check \"src/**/*.{ts,tsx,json,md}\" \"*.{json,md}\"",
+    "format:fix": "prettier --write \"src/**/*.{ts,tsx,json,md}\" \"*.{json,md}\"",
+    "lint": "eslint src --ext .ts,.tsx",
+    "lint:fix": "eslint src --ext .ts,.tsx --fix",
+    "preinstall": "node -e \"console.error('\\n\\x1b[41m\\x1b[37m WARNING \\x1b[0m \\x1b[31mDO NOT USE LIB1PASSWORD-UNOFFICIAL IN PRODUCTION\\x1b[0m\\n\\nWhile the 1Password Team greenlit publication of this library, it is not an official product developed or maintained by AgileBits, Inc.\\n')\"",
+    "prepublishOnly": "npm run clean && npm run build",
+    "prepack": "npm run build",
+    "prepare": "husky",
+    "test": "NODE_OPTIONS=\"--import=tsx/esm\" jasmine",
+    "type-check": "tsc --noEmit",
+    "validate": "npm run type-check && npm run lint && npm run format && npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/edeckers/lib1password-unofficial.git"
+  },
+  "bugs": {
+    "url": "https://github.com/edeckers/lib1password-unofficial/issues"
+  },
+  "homepage": "https://passwords.lgtm.it",
+  "devDependencies": {
+    "@commitlint/config-conventional": "^20",
+    "@rollup/plugin-commonjs": "^28",
+    "@rollup/plugin-node-resolve": "^16",
+    "@rollup/plugin-strip": "^3",
+    "@rollup/plugin-terser": "^0",
+    "@rollup/plugin-typescript": "^12",
+    "@semantic-release/changelog": "^6",
+    "@semantic-release/git": "^10",
+    "@types/jasmine": "^5",
+    "@types/node": "^24",
+    "@typescript-eslint/eslint-plugin": "^8",
+    "@typescript-eslint/parser": "^8",
+    "commitlint": "^20",
+    "eslint": "^9",
+    "eslint-config-prettier": "^10",
+    "eslint-plugin-prettier": "^5",
+    "husky": "^9",
+    "jasmine": "^5",
+    "prettier": "^3",
+    "rollup": "^4",
+    "rollup-plugin-dts": "^6",
+    "semantic-release": "^24",
+    "tsconfig-paths": "^4",
+    "tslib": "^2",
+    "tsx": "^4",
+    "typescript": "^5"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  }
+}
