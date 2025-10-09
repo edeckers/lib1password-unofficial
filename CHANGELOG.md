@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/edeckers/lib1password-unofficial/compare/v1.1.0...v1.1.1) (2025-10-09)
+
+
+### Bug Fixes
+
+* add 1Password compatibility test scenario ([#1](https://github.com/edeckers/lib1password-unofficial/issues/1)) ([d22ca8e](https://github.com/edeckers/lib1password-unofficial/commit/d22ca8e6e969961a0e2db71305cc8fcd41c1ba54))
+
 # [1.1.0](https://github.com/edeckers/lib1password-unofficial/compare/v1.0.1...v1.1.0) (2025-10-08)
 
 
