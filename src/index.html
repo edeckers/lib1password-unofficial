@@ -293,27 +293,28 @@
             </div>
             <div class="bg-blue-50 border-blue-200 rounded-lg p-6 mb-6 space-y-6 text-blue-800">
                 <p class="text-sm">
-                    Your account is <strong>created and encrypted locally</strong>, then <strong>sent to 1Password's servers</strong> for storage; they never see your encryption keys or plaintext data:
+                    Your account is <strong>created and encrypted locally</strong>, then <strong>sent to 1Password's servers</strong> for storage; they never see your encryption keys or plaintext data
                 </p>
                 <div class="grid md:grid-cols-2 gap-4 text-sm">
                     <div>
                         <p class="font-semibold mb-2">Sent to Server:</p>
                         <ul class="space-y-1">
-                            <li>• Your email address</li>
-                            <li>• Encrypted Account Password (encrypted with AUK)</li>
-                            <li>• Encrypted private key (encrypted with Keyset Access Key)</li>
-                            <li>• Public key (unencrypted, it's public)</li>
-                            <li>• Encrypted vault data</li>
+                            <li>• Email Address</li>
+                            <li>• Account Password (encrypted with AUK)</li>
+                            <li>• Private Key (encrypted with Keyset Access Key)</li>
+                            <li>• Public Key (unencrypted, it's public)</li>
+                            <li>• Vault Key (encrypted, with Public Key)</li>
+                            <li>• Vault data (encrypted with Vault Key)</li>
                         </ul>
                     </div>
                     <div>
                         <p class="font-semibold mb-2">Never Leaves Your Device:</p>
                         <ul class="space-y-1">
-                            <li>• Your Account Password (plaintext)</li>
-                            <li>• Your Secret Key</li>
+                            <li>• Account Password</li>
+                            <li>• Secret Key</li>
                             <li>• Account Unlock Key (AUK)</li>
-                            <li>• Private key (plaintext)</li>
-                            <li>• Any decrypted vault data</li>
+                            <li>• Private Key</li>
+                            <li>• Any unencrypted vault data</li>
                         </ul>
                     </div>
                 </div>
