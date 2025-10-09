@@ -21,7 +21,7 @@ const decryptAsymmetric = async (
 
 export class KeysetDecryptor {
   public constructor(
-    private readonly encryptedKeyset: { [key: string]: Keyset },
+    public readonly encryptedKeyset: { [key: string]: Keyset },
   ) {}
 
   public decrypt = async (
