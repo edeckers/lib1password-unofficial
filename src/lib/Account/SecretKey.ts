@@ -4,20 +4,22 @@ import { arrayBufferToString, stringToArrayBuffer } from "~/lib/Encoding";
 import { SYMMETRIC_KEY_ENCRYPTION_ALGORITHM } from "~/Consts";
 import { decryptSymmetric, encryptSymmetric } from "~/lib/Encryption";
 
-const SECRET_NUMBER_OF_BYTES = 32;
 const VERSION = "A3";
+const SECRET_KEY_RANDOM_NUMBER_OF_BYTES = 32;
+const FULL_SECRET_KEY_NUMBER_OF_BYTES =
+  SECRET_KEY_RANDOM_NUMBER_OF_BYTES + VERSION.length;
 
 const sanitizeSecret = (rawSecret: Uint8Array<ArrayBuffer>) => {
   assert(
-    rawSecret.length === SECRET_NUMBER_OF_BYTES,
-    `A secret must contain exactly ${SECRET_NUMBER_OF_BYTES} bytes`,
+    rawSecret.length === FULL_SECRET_KEY_NUMBER_OF_BYTES,
+    `A secret must contain exactly ${FULL_SECRET_KEY_NUMBER_OF_BYTES} bytes`,
   );
   assert(
     rawSecret.filter((v) => {
       const c = String.fromCharCode(v);
 
       return c.match(/[A-Z0-9]/);
-    }).length === SECRET_NUMBER_OF_BYTES,
+    }).length === FULL_SECRET_KEY_NUMBER_OF_BYTES,
     "A secret only contains numbers and uppercase letters",
   );
 
@@ -49,9 +51,9 @@ const generateSecretKeyObfuscationKey = async () => {
 
 const generateRandomArrayOfAlphaNumValues = () => {
   let result = new Uint8Array();
-  while (result.length <= SECRET_NUMBER_OF_BYTES) {
+  while (result.length <= SECRET_KEY_RANDOM_NUMBER_OF_BYTES) {
     const randomData = crypto.getRandomValues(
-      new Uint8Array(SECRET_NUMBER_OF_BYTES),
+      new Uint8Array(SECRET_KEY_RANDOM_NUMBER_OF_BYTES),
     );
 
     // https://agilebits.github.io/security-design/deepKeys.html
@@ -73,7 +75,7 @@ const generateRandomArrayOfAlphaNumValues = () => {
     result = new Uint8Array([...result, ...randomAlphaNumeric]);
   }
 
-  return result.slice(0, SECRET_NUMBER_OF_BYTES);
+  return result.slice(0, SECRET_KEY_RANDOM_NUMBER_OF_BYTES);
 };
 
 const chunks = (value: string, size: number) => {
@@ -101,6 +103,26 @@ const toFullWithDashes = (
   return secretWithDashes;
 };
 
+// From: https://evanhahn.com/the-best-way-to-concatenate-uint8arrays/
+const concat = (
+  uint8arrays: Uint8Array<ArrayBuffer>[],
+): Uint8Array<ArrayBuffer> => {
+  const totalLength = uint8arrays.reduce(
+    (total, uint8array) => total + uint8array.byteLength,
+    0,
+  );
+
+  const result = new Uint8Array(totalLength);
+
+  let offset = 0;
+  uint8arrays.forEach((uint8array) => {
+    result.set(uint8array, offset);
+    offset += uint8array.byteLength;
+  });
+
+  return result;
+};
+
 export class SecretKey {
   public readonly fullWithDashes: string;
 
@@ -117,11 +139,14 @@ export class SecretKey {
   ): SecretKey => {
     const sanitizedValue = sanitizeSecret(value);
 
-    const version = VERSION;
-    const id = arrayBufferToString(sanitizedValue.slice(0, 6).buffer);
+    const version = sanitizedValue
+      .slice(0, 2)
+      .reduce((s, b) => s + String.fromCharCode(b), "");
+
+    const id = arrayBufferToString(sanitizedValue.slice(2, 8).buffer);
 
     const secretDataString = arrayBufferToString(
-      sanitizedValue.slice(6).buffer,
+      sanitizedValue.slice(8).buffer,
     );
 
     return new SecretKey(version, id, secretDataString);
@@ -153,5 +178,10 @@ export class SecretKey {
   };
 
   public static generate = () =>
-    SecretKey.secretKeyFromData(generateRandomArrayOfAlphaNumValues());
+    SecretKey.secretKeyFromData(
+      concat([
+        stringToArrayBuffer(VERSION),
+        generateRandomArrayOfAlphaNumValues(),
+      ]),
+    );
 }

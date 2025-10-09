@@ -16,9 +16,9 @@ export { Session } from "~/lib/Session";
 
 export {
   EncryptedVaultItem,
-  AsymEncryptedData as SomeAsymEncryptedData,
-  SymEncryptedData as SomeSymEncryptedData,
-  AccessData as SomeAccessData,
+  AsymEncryptedData,
+  SymEncryptedData,
+  AccessData,
   VaultAccess,
   VaultInfo,
 } from "~/lib/Vault/Entities";
