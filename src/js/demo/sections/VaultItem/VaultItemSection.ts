@@ -140,13 +140,15 @@ const visualizeItemEncryption = async (
       itemId,
     );
 
+    renderItemDisplay(vault, itemId, encryptedItem);
+
+    // *After* render, so we can scroll the screen to the final position of
+    // the transition text
     sendEvent('storedEncryptedItem', {
       encryptedItem,
       itemId,
       vaultId: vault.uuid,
     });
-
-    renderItemDisplay(vault, itemId, encryptedItem);
 
     activateEncryptItemBtn();
   } catch (error) {

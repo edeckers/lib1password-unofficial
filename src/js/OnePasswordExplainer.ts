@@ -2,7 +2,6 @@ import type { Vault } from '@edeckers/lib1password-unofficial';
 import { KEY_DERIVATION_NUMBER_OF_ITERATIONS } from '~/demo/Consts';
 import {
   hideAllSections,
-  scrollToAccountCreationSection,
   scrollToDecryptionSection,
 } from '~/demo/DemoFlowHelpers';
 import { AccountCompletionSection } from '~/demo/sections/AccountCompletion/AccountCompletionSection';
@@ -105,6 +104,8 @@ const onDerivedKeys = () => {
   $transition1.classList.remove('hidden');
   $transition2.classList.remove('hidden');
   $transition3.classList.remove('hidden');
+
+  $transition3.scrollIntoView({ behavior: 'smooth', block: 'center' });
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -127,7 +128,7 @@ const onCompletedAccountCreation = (o: any) => {
   $transition3.classList.remove('hidden');
   $transition4.classList.remove('hidden');
 
-  scrollToAccountCreationSection('end');
+  $transition4.scrollIntoView({ behavior: 'smooth', block: 'end' });
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -151,7 +152,8 @@ const onStoredEncryptedItem = (o: any) => {
   $transition3.classList.remove('hidden');
   $transition4.classList.remove('hidden');
   $transition5.classList.remove('hidden');
-  scrollToDecryptionSection('start');
+
+  $transition5.scrollIntoView({ behavior: 'smooth', block: 'center' });
 };
 
 const onDecryptedStoredItem = () => {

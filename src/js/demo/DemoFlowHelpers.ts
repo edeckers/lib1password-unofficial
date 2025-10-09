@@ -37,12 +37,3 @@ export const scrollToDecryptionSection = (
 ): void => {
   $decryptionSection.scrollIntoView({ behavior: 'smooth', block: where });
 };
-
-export const scrollToAccountCreationSection = (
-  where: ScrollLogicalPosition = 'start',
-): void => {
-  $accountCreationSection.scrollIntoView({
-    behavior: 'smooth',
-    block: where,
-  });
-};
