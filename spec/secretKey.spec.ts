@@ -66,4 +66,31 @@ describe("The secret key", () => {
       chunks.forEach(c => expect(c.length).toBe(5))
     })
   });
+
+  describe("has a method to be", () => {
+    it("obfuscated", async () => {
+      // Arrange
+      const secretKey = SecretKey.generate()
+
+      // Act
+      const obfuscated = await secretKey.obfuscate()
+
+      // Assert
+      expect(JSON.stringify(obfuscated).indexOf(secretKey.fullWithDashes) === -1).toBeTruthy()
+      expect(JSON.stringify(obfuscated).indexOf(secretKey.fullWithDashes.replace("-", "")) === -1).toBeTruthy()
+      expect(obfuscated.kid).toBe("obf-v1")
+    })
+
+    it("de-obfuscated", async () => {
+      // Arrange
+      const secretKey = SecretKey.generate()
+      const obfuscated = await secretKey.obfuscate()
+
+      // Act
+      const deobfuscated = await SecretKey.fromObfuscated(obfuscated)
+
+      // Assert
+      expect(deobfuscated.fullWithDashes).toBe(secretKey.fullWithDashes)
+    })
+  });
 });
