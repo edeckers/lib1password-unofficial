@@ -4,7 +4,6 @@ import {
   hideAllSections,
   scrollToAccountCreationSection,
   scrollToDecryptionSection,
-  scrollToSecretKeySection,
 } from '~/demo/DemoFlowHelpers';
 import { AccountCompletionSection } from '~/demo/sections/AccountCompletion/AccountCompletionSection';
 import { DecryptionSection } from '~/demo/sections/Decryption/DecryptionSection';
@@ -92,7 +91,7 @@ const onCreatedRegistrationInfo = (o: any) => {
   $transition1.classList.remove('hidden');
   $transition2.classList.remove('hidden');
 
-  scrollToSecretKeySection('center');
+  $transition1.scrollIntoView({ behavior: 'smooth', block: 'center' });
 };
 
 const onDerivedKeys = () => {

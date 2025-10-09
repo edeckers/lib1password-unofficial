@@ -32,17 +32,12 @@ export const hideAllSections = () => {
   allTransitions.forEach((t) => t.classList.add('hidden'));
 };
 
-export const scrollToSecretKeySection = (
-  where: ScrollLogicalPosition = 'start',
-): void => {
-  $secretKeySection.scrollIntoView({ behavior: 'smooth', block: where });
-};
-
 export const scrollToDecryptionSection = (
   where: ScrollLogicalPosition = 'start',
 ): void => {
   $decryptionSection.scrollIntoView({ behavior: 'smooth', block: where });
 };
+
 export const scrollToAccountCreationSection = (
   where: ScrollLogicalPosition = 'start',
 ): void => {
