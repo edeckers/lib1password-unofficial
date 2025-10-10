@@ -3,16 +3,21 @@
 [![License: MPL 2.0](https://img.shields.io/badge/License-MPL%202.0-brightgreen.svg)](https://opensource.org/licenses/MPL-2.0)
 [![Build](https://github.com/edeckers/lib1password-unofficial/actions/workflows/deploy.yml/badge.svg?branch=develop)](https://github.com/edeckers/lib1password-unofficial/actions/workflows/deploy.yml)
 
-This repository contains an educational TypeScript implementation of 1Password's cryptographic security model, including an interactive demo that is available at [https://passwords.lgtm.it](https://passwords.lgtm.it)
+This repository contains an educational TypeScript implementation of 1Password's cryptographic security model, including an interactive explainer that is available at [https://passwords.lgtm.it](https://passwords.lgtm.it)
 
 > ⚠️ While the 1Password Team greenlit publication of this library and the accompanying demo, neither is an official product developed or maintained by AgileBits, Inc.
 
-The live demo aims to teach how 1Password protects your data by exploring a working implementation of:
+The interactive explainer aims to clarify how 1Password protects your data by exploring a working implementation of:
 
 1. Secret Key generation and validation
 1. PBKDF2 key derivation
 1. AES-256-GCM vault encryption
 1. Master/Account keyset architecture
+
+---
+
+- **Blogpost:** https://medium.com/@edeckers/stopping-bad-actors-inside-1passwords-security-model-8c65c6acb9ff
+- **Explainer source:** https://github.com/edeckers/lib1password-unofficial/tree/gh-pages
 
 ## Disclaimers
 
