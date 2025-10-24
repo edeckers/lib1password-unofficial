@@ -1,3 +1,10 @@
+## [1.1.3](https://github.com/edeckers/lib1password-unofficial/compare/v1.1.2...v1.1.3) (2025-10-24)
+
+
+### Bug Fixes
+
+* vault.readAllItems error bc missing bind ([#3](https://github.com/edeckers/lib1password-unofficial/issues/3)) ([14ac5dd](https://github.com/edeckers/lib1password-unofficial/commit/14ac5dd9f66d5aa941a278c289cdc0d957663a25))
+
 ## [1.1.2](https://github.com/edeckers/lib1password-unofficial/compare/v1.1.1...v1.1.2) (2025-10-24)
 
 
