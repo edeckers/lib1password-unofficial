@@ -10,6 +10,7 @@ import {
   encryptSymmetric,
   exportCryptoKeyAsJwk,
   generateIV,
+  generateSalt,
   generateSymKey,
 } from "~/lib/Encryption";
 import { base64encode, stringToArrayBuffer } from "~/lib/Encoding";
@@ -170,7 +171,9 @@ export class AccountCreator {
   ) {}
 
   public create = async (registration: RegistrationInfo) => {
-    const { secretKey, aukSalt, auk, emailAddress } = registration;
+    const aukSalt = generateSalt();
+
+    const { secretKey, auk, emailAddress } = registration;
 
     logger.info("Generate keyset");
     const saltedAukCryptoKey = await auk.derive(
