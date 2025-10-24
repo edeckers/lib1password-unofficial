@@ -5,12 +5,7 @@ import { InMemoryVaultRepository } from "../src/lib/Example/InMemoryVaultReposit
 import { Vault } from "../src/lib/Vault/Vault";
 import { KeysetDecryptor } from "../src/lib/Keysets/KeysetDecryptor";
 import { arrayBufferToString, stringToArrayBuffer } from "../src/lib/Encoding";
-
-class Fixtures {
-  public static accounts = () => new InMemoryAccountRepository()
-  public static vaults = () => new InMemoryVaultRepository()
-  public static registrationInfo = () => RegistrationInfo.create('my@email.tld', 'password123')
-}
+import { Fixtures } from "./fixtures";
 
 describe("Account creation", () => {
   let registrationInfo: RegistrationInfo

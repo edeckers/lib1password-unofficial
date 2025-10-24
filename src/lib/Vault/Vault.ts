@@ -66,7 +66,7 @@ export class Vault {
       this.uuid,
     );
 
-    return await Promise.all(vaultItemIds.map(this.readItem));
+    return await Promise.all(vaultItemIds.map(this.readItem.bind(this)));
   }
 
   public static using = (vaultRepository: VaultRepository) => ({
