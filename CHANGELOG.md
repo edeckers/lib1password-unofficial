@@ -1,3 +1,10 @@
+## [1.1.5](https://github.com/edeckers/lib1password-unofficial/compare/v1.1.4...v1.1.5) (2025-10-24)
+
+
+### Bug Fixes
+
+* disconnect session creation from auth flow ([#5](https://github.com/edeckers/lib1password-unofficial/issues/5)) ([10f7e00](https://github.com/edeckers/lib1password-unofficial/commit/10f7e00dd8addb96777a6a16d384a66e46b5157d))
+
 ## [1.1.4](https://github.com/edeckers/lib1password-unofficial/compare/v1.1.3...v1.1.4) (2025-10-24)
 
 
