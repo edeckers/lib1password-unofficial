@@ -97,7 +97,6 @@ describe("Authentication flow", () => {
     authenticationFlow = new AuthenticationFlow(
       authenticator,
       accounts,
-      accounts,
       vaults
     );
   });
