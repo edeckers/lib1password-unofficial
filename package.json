@@ -1,6 +1,6 @@
 {
   "name": "@edeckers/lib1password-unofficial",
-  "version": "1.1.5",
+  "version": "1.1.6",
   "license": "MPL-2.0",
   "description": "Unofficial TypeScript implementation of 1Password's security model based on their white paper",
   "author": {

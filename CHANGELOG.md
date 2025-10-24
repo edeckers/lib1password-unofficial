@@ -1,3 +1,10 @@
+## [1.1.6](https://github.com/edeckers/lib1password-unofficial/compare/v1.1.5...v1.1.6) (2025-10-24)
+
+
+### Bug Fixes
+
+* mark AuthenticationFlow fields private ([#6](https://github.com/edeckers/lib1password-unofficial/issues/6)) ([ea5293b](https://github.com/edeckers/lib1password-unofficial/commit/ea5293b32ebcc38c9540232afc5da4cbbdf04e65))
+
 ## [1.1.5](https://github.com/edeckers/lib1password-unofficial/compare/v1.1.4...v1.1.5) (2025-10-24)
 
 
