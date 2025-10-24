@@ -11,7 +11,7 @@ export { AccountCreator } from "~/lib/Account/AccountCreator";
 
 export { Vault } from "~/lib/Vault/Vault";
 export { AccountUnlockKey } from "~/lib/Account/AccountUnlockKey";
-export { Profile, ProfileAuth } from "~/lib/Profile/Entities";
+export { Profile } from "~/lib/Profile/Entities";
 export { Session } from "~/lib/Session";
 
 export {

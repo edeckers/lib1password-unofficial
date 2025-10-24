@@ -6,13 +6,21 @@ import { base64decode, base64encode } from "../src/lib/Encoding";
 import { AuthenticationFlow } from "~/lib/AuthenticationFlow";
 import { AccountUnlockKey } from "~/lib/Account/AccountUnlockKey";
 import { Authenticator } from "~/lib/Authentication/Authenticator";
-import { ProfileAuth } from "~/lib/Profile/Entities";
 import { exportCryptoKeyAsJwk, generateSalt } from "~/lib/Encryption";
 import { KEY_DERIVATION_NUMBER_OF_ITERATIONS } from "~/Consts";
 
 // This spec is more of a demonstration of how authentication can be
 // implemented using the library, rather than a strict unit test. For
-// it doesn't really test anything
+// it doesn't really test anything.
+// 
+// Loosely based on the example SrpxAuthenticator included in the
+// Example folder.
+interface ProfileAuth {
+  salt: string;
+  alg: string;
+  iterations: number;
+  method: string;
+}
 
 class DummyAuthenticator implements Authenticator {
   private readonly profileAuthStore: { [key: string]: ProfileAuth } = {};
@@ -71,7 +79,7 @@ describe("Authentication flow", () => {
   let accountCreator: AccountCreator;
 
   let authenticationFlow: AuthenticationFlow;
-  let authenticator: Authenticator;
+  let authenticator: DummyAuthenticator;
 
 
   beforeEach(async () => {
@@ -95,8 +103,6 @@ describe("Authentication flow", () => {
   });
 
   describe("Needs an authenticator that offloads user authentication from the library", () => {
-
-
 
     it("to succeed", async () => {
       // Arrange

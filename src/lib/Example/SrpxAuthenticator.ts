@@ -1,12 +1,11 @@
 import { exportCryptoKeyAsJwk, generateSalt } from "~/lib/Encryption";
 import { Authenticator } from "~/lib/Authentication/Authenticator";
-import { ProfileAuth } from "~/lib/Profile/Entities";
 import { AccountUnlockKey } from "~/lib/Account/AccountUnlockKey";
 import { base64decode, base64encode } from "~/lib/Encoding";
 import { KEY_DERIVATION_NUMBER_OF_ITERATIONS } from "~/Consts";
 
 const deriveSrpxJsonWebKey = async (
-  profile: ProfileAuth,
+  profile: SrpxProfileAuth,
   accountUnlockKey: AccountUnlockKey,
 ): Promise<JsonWebKey> => {
   const srpxKey = await accountUnlockKey.derive(
@@ -17,22 +16,29 @@ const deriveSrpxJsonWebKey = async (
   return await exportCryptoKeyAsJwk(srpxKey);
 };
 
+export interface SrpxProfileAuth {
+  salt: string;
+  alg: string;
+  iterations: number;
+  method: string;
+}
+
 export class SrpxAuthenticator implements Authenticator {
   public constructor(
     private readonly profileAuthByProfileId: (
       profileId: string,
-    ) => Promise<ProfileAuth>,
+    ) => Promise<SrpxProfileAuth>,
     private readonly authenticate: (srpxKey: JsonWebKey) => Promise<void>,
   ) {}
 
   public storeProfileAuth(
     accountId: string, // eslint-disable-line @typescript-eslint/no-unused-vars
-    profileAuth: ProfileAuth, // eslint-disable-line @typescript-eslint/no-unused-vars
+    profileAuth: SrpxProfileAuth, // eslint-disable-line @typescript-eslint/no-unused-vars
   ): Promise<void> {
     throw new Error("Method not implemented.");
   }
 
-  public createProfileAuth = (): ProfileAuth => {
+  public createProfileAuth = (): SrpxProfileAuth => {
     const saltBytes = base64encode(generateSalt());
     return {
       salt: saltBytes,
