@@ -1,3 +1,10 @@
+## [1.1.4](https://github.com/edeckers/lib1password-unofficial/compare/v1.1.3...v1.1.4) (2025-10-24)
+
+
+### Bug Fixes
+
+* leaky abstraction of ProfileAuth ([#4](https://github.com/edeckers/lib1password-unofficial/issues/4)) ([5789df5](https://github.com/edeckers/lib1password-unofficial/commit/5789df558b78198e4330052dbecc274a2e1ad5a4))
+
 ## [1.1.3](https://github.com/edeckers/lib1password-unofficial/compare/v1.1.2...v1.1.3) (2025-10-24)
 
 
