@@ -5,7 +5,6 @@ import {
   Session,
   type Authenticator,
   type KeysetRepository,
-  type ProfileAuth,
   type ProfileRepository,
   type RegistrationInfo,
   type SecretKey,
@@ -120,7 +119,6 @@ const displayGeneratedKeys = async (
 
 const authenticateAndUnlockVaults = async (
   keysetRepository: KeysetRepository,
-  profileRepository: ProfileRepository,
   vaultRepository: VaultRepository,
   secretKey: SecretKey,
   email: string,
@@ -132,26 +130,11 @@ const authenticateAndUnlockVaults = async (
       login: async (_profile: any, _auker: AccountUnlockKey) => {
         console.info('Mock SRP authentication completed');
       },
-      createProfileAuth: (): ProfileAuth => ({
-        salt: 'dummy',
-        alg: 'dummy',
-        iterations: 0,
-        method: 'dummy',
-      }),
-      storeProfileAuth: async (
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        accountId: string,
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        profileAuth: ProfileAuth,
-      ): Promise<void> => {
-        // noop
-      },
     };
 
     const authFlow = new AuthenticationFlow(
       mockAuthenticator,
       keysetRepository,
-      profileRepository,
       vaultRepository,
     );
 
@@ -216,7 +199,6 @@ const completeAccountCreation = async (
 
     const session = await authenticateAndUnlockVaults(
       keysetRepository,
-      profileRepository,
       vaultRepository,
       registrationInfo.secretKey,
       registrationInfo.emailAddress,
