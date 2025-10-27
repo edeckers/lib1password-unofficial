@@ -18,6 +18,7 @@ The interactive explainer aims to clarify how 1Password protects your data by ex
 
 - **Blogpost:** https://medium.com/@edeckers/stopping-bad-actors-inside-1passwords-security-model-8c65c6acb9ff
 - **Explainer source:** https://github.com/edeckers/lib1password-unofficial/tree/gh-pages
+- **Featured on TypeScript.fm:** [Episode 39 (33m25s)](https://typescript.fm/39#t=33m25s)
 
 ## Disclaimers
 
