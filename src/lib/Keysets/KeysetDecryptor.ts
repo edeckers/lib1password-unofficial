@@ -54,34 +54,51 @@ export class KeysetDecryptor {
     accountUnlockKey: AccountUnlockKey,
     keysets: KeysetResponse[],
   ): Promise<KeysetDecryptor> => {
-    const masterKeyset = keysets.find((ek) => ek.encryptedBy === "mp");
+    const masterKeysetEncrypted = keysets.find((ek) => ek.encryptedBy === "mp");
 
-    if (!masterKeyset) {
+    if (!masterKeysetEncrypted) {
       throw new Error("No master keyset found");
     }
 
-    const { encSymKey } = masterKeyset;
+    const { encSymKey } = masterKeysetEncrypted;
 
     const auk = await accountUnlockKey.derive(
       encSymKey.p2c,
       base64decode(encSymKey.p2s),
     );
 
-    const mks = await EncryptedKeyset.fromResponse(masterKeyset).decrypt(auk);
-
-    const kx = {
-      [masterKeyset.uuid]: mks,
-    };
+    const mEncryptedBy: { [key: string]: KeysetResponse[] } =
+      Object.fromEntries(keysets.map((ks) => [ks.uuid, []]));
 
     for (const ks of keysets) {
-      if (!kx[ks.encryptedBy]) {
-        continue;
+      mEncryptedBy[ks.uuid].push(ks);
+    }
+
+    const masterKeyset = await EncryptedKeyset.fromResponse(
+      masterKeysetEncrypted,
+    ).decrypt(auk);
+
+    const kx = {
+      [masterKeysetEncrypted.uuid]: masterKeyset,
+    };
+
+    const decryptChain = async (encryptorUuid: string) => {
+      const encryptedChildKeysets = mEncryptedBy[encryptorUuid];
+
+      const encryptor = kx[encryptorUuid];
+
+      for (const cks of encryptedChildKeysets) {
+        kx[cks.uuid] = await EncryptedKeyset.fromResponse(cks).decrypt(
+          encryptor.sym.k,
+        );
       }
 
-      kx[ks.uuid] = await EncryptedKeyset.fromResponse(ks).decrypt(
-        kx[ks.encryptedBy].sym.k,
+      await Promise.all(
+        encryptedChildKeysets.map((cks) => decryptChain(cks.uuid)),
       );
-    }
+    };
+
+    decryptChain(masterKeysetEncrypted.uuid);
 
     return new KeysetDecryptor(kx);
   };
