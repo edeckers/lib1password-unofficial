@@ -1,3 +1,16 @@
+# [1.2.0](https://github.com/edeckers/lib1password-unofficial/compare/v1.1.6...v1.2.0) (2026-02-28)
+
+
+### Bug Fixes
+
+* deprecate Session.secretKey ([#11](https://github.com/edeckers/lib1password-unofficial/issues/11)) ([33424a5](https://github.com/edeckers/lib1password-unofficial/commit/33424a580ff7da45bde193f7b701599a9f632bfa))
+* **deps:** bump npm dependencies to latest major pin ([#9](https://github.com/edeckers/lib1password-unofficial/issues/9)) ([1df7de0](https://github.com/edeckers/lib1password-unofficial/commit/1df7de0ab377610243a7172e8478cc6682d13591))
+
+
+### Features
+
+* support rotation of secret key and credentials ([#8](https://github.com/edeckers/lib1password-unofficial/issues/8)) ([778dc3b](https://github.com/edeckers/lib1password-unofficial/commit/778dc3b367cfa3fe77a9a5fa8bc7be612fda15d4))
+
 ## [1.1.6](https://github.com/edeckers/lib1password-unofficial/compare/v1.1.5...v1.1.6) (2025-10-24)
 
 
