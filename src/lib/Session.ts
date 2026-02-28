@@ -7,6 +7,9 @@ import { VaultRepository } from "~/lib/Vault/VaultRepository";
 
 export class Session {
   constructor(
+    /**
+     * @deprecated We don't use this anywhere, best not to be exposed if not absolutely necessary
+     */
     public readonly secretKey: SecretKey,
     public readonly vaults: Vault[],
   ) {}
