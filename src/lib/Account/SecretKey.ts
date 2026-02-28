@@ -5,6 +5,7 @@ import { SYMMETRIC_KEY_ENCRYPTION_ALGORITHM } from "~/Consts";
 import { decryptSymmetric, encryptSymmetric } from "~/lib/Encryption";
 
 const VERSION = "A3";
+const SECRET_KEY_ID_LENGTH_IN_BYTES = 6;
 const SECRET_KEY_RANDOM_NUMBER_OF_BYTES = 32;
 const FULL_SECRET_KEY_NUMBER_OF_BYTES =
   SECRET_KEY_RANDOM_NUMBER_OF_BYTES + VERSION.length;
@@ -49,12 +50,10 @@ const generateSecretKeyObfuscationKey = async () => {
   );
 };
 
-const generateRandomArrayOfAlphaNumValues = () => {
+const generateRandomArrayOfAlphaNumValues = (numberOfBytes: number) => {
   let result = new Uint8Array();
-  while (result.length <= SECRET_KEY_RANDOM_NUMBER_OF_BYTES) {
-    const randomData = crypto.getRandomValues(
-      new Uint8Array(SECRET_KEY_RANDOM_NUMBER_OF_BYTES),
-    );
+  while (result.length <= numberOfBytes) {
+    const randomData = crypto.getRandomValues(new Uint8Array(numberOfBytes));
 
     // https://agilebits.github.io/security-design/deepKeys.html
     const randomAlphaNumeric = randomData.filter((v) => {
@@ -75,7 +74,7 @@ const generateRandomArrayOfAlphaNumValues = () => {
     result = new Uint8Array([...result, ...randomAlphaNumeric]);
   }
 
-  return result.slice(0, SECRET_KEY_RANDOM_NUMBER_OF_BYTES);
+  return result.slice(0, numberOfBytes);
 };
 
 const chunks = (value: string, size: number) => {
@@ -181,7 +180,18 @@ export class SecretKey {
     SecretKey.secretKeyFromData(
       concat([
         stringToArrayBuffer(VERSION),
-        generateRandomArrayOfAlphaNumValues(),
+        generateRandomArrayOfAlphaNumValues(SECRET_KEY_RANDOM_NUMBER_OF_BYTES),
+      ]),
+    );
+
+  public rotate = (): SecretKey =>
+    SecretKey.secretKeyFromData(
+      concat([
+        stringToArrayBuffer(this.version),
+        stringToArrayBuffer(this.accountId),
+        generateRandomArrayOfAlphaNumValues(
+          SECRET_KEY_RANDOM_NUMBER_OF_BYTES - SECRET_KEY_ID_LENGTH_IN_BYTES,
+        ),
       ]),
     );
 }

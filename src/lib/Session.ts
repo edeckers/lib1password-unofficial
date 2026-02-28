@@ -19,11 +19,7 @@ class Rekeyer {
     private readonly masterKeysetUuid: string,
   ) {}
 
-  public rekey = async (
-    secretKey: SecretKey,
-    emailAddress: string,
-    password: string,
-  ): Promise<void> => {
+  public rekey = async (accountUnlockKey: AccountUnlockKey): Promise<void> => {
     const keysets = await this.keysetRepository.readKeysetsRaw();
     const masterKeyset = keysets.find(
       (ks) => ks.uuid === this.masterKeysetUuid,
@@ -40,17 +36,14 @@ class Rekeyer {
       throw new Error("Master keyset not found in decryptor");
     }
 
-    const newAuk = await AccountUnlockKey.create(
-      emailAddress,
-      password,
-      secretKey,
-    );
-
     const { encSymKey } = masterKeyset;
     const originalSalt = base64decode(encSymKey.p2s);
     const iterations = encSymKey.p2c;
 
-    const newDerivedKey = await newAuk.derive(iterations, originalSalt);
+    const newDerivedKey = await accountUnlockKey.derive(
+      iterations,
+      originalSalt,
+    );
 
     const symKeyJwk = await exportCryptoKeyAsJwk(decryptedMasterKeyset.sym.k);
     const iv = generateIV();
@@ -85,6 +78,7 @@ export class Session {
      * @deprecated We don't use this anywhere, best not to be exposed if not absolutely necessary
      */
     public readonly secretKey: SecretKey,
+    private readonly accountUnlockKey: AccountUnlockKey,
     public readonly vaults: Vault[],
     private readonly rekeyer: Rekeyer,
   ) {}
@@ -92,8 +86,34 @@ export class Session {
   public getPersonalVault = (): Vault | undefined =>
     this.vaults.length > 0 ? this.vaults[0] : undefined;
 
-  public rekey = (emailAddress: string, password: string): Promise<void> =>
-    this.rekeyer.rekey(this.secretKey, emailAddress, password);
+  public changeCredentials = async (
+    emailAddress: string,
+    password: string,
+  ): Promise<Session> => {
+    const newAccountUnlockKey =
+      await this.accountUnlockKey.withChangedCredentials(
+        emailAddress,
+        password,
+      );
+    await this.rekeyer.rekey(newAccountUnlockKey);
+    return new Session(
+      this.secretKey,
+      newAccountUnlockKey,
+      this.vaults,
+      this.rekeyer,
+    );
+  };
+
+  public rotateSecretKey = async (): Promise<Session> => {
+    const newAccountUnlockKey = this.accountUnlockKey.withRotatedSecretKey();
+    await this.rekeyer.rekey(newAccountUnlockKey);
+    return new Session(
+      newAccountUnlockKey.secret,
+      newAccountUnlockKey,
+      this.vaults,
+      this.rekeyer,
+    );
+  };
 
   public static using = (
     keysetRepository: KeysetRepository,
@@ -123,7 +143,7 @@ export class Session {
         masterKeyset.uuid,
       );
 
-      return new Session(secretKey, unlockedVaults, rekeyer);
+      return new Session(secretKey, accountUnlockKey, unlockedVaults, rekeyer);
     },
   });
 }

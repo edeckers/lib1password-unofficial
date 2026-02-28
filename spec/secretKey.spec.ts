@@ -93,4 +93,42 @@ describe("The secret key", () => {
       expect(deobfuscated.fullWithDashes).toBe(secretKey.fullWithDashes)
     })
   });
+
+  describe("rotate", () => {
+    it("should preserve version and accountId", () => {
+      // Arrange
+      const secretKey = SecretKey.generate();
+
+      // Act
+      const rotated = secretKey.rotate();
+
+      // Assert
+      expect(rotated.version).toBe(secretKey.version);
+      expect(rotated.accountId).toBe(secretKey.accountId);
+    });
+
+    it("should generate a different secret", () => {
+      // Arrange
+      const secretKey = SecretKey.generate();
+
+      // Act
+      const rotated = secretKey.rotate();
+
+      // Assert
+      expect(rotated.secret).not.toBe(secretKey.secret);
+      expect(rotated.secret.length).toBe(26);
+    });
+
+    it("should maintain the same structure", () => {
+      // Arrange
+      const secretKey = SecretKey.generate();
+
+      // Act
+      const rotated = secretKey.rotate();
+
+      // Assert
+      expect(rotated.fullWithDashes.replace(/-/g, "").length).toBe(34);
+      expect(/^[A-Z0-9]+$/.test(rotated.secret)).toBeTrue();
+    });
+  });
 });
