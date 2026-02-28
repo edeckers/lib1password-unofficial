@@ -135,6 +135,23 @@ console.log(
 );
 ```
 
+## API Reference
+
+### Session
+
+| Member | Description |
+|--------|-------------|
+| `secretKey` | The account's secret key |
+| `vaults` | List of unlocked vaults |
+| `getPersonalVault()` | Convenience method to get the primary vault |
+| `rekey(emailAddress, password)` | Change account credentials by re-encrypting the master keyset |
+
+### AuthenticationFlow
+
+| Method | Description |
+|--------|-------------|
+| `login(emailAddress, password, secretKey)` | Authenticate and unlock vaults |
+
 ## Contributing
 
 See the [contributing guide](CONTRIBUTING.md) to learn how to contribute to the repository and the development workflow.
