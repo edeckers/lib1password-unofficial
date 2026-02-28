@@ -1,7 +1,7 @@
-import { AccountCreator } from "../src/lib/Account/AccountCreator";
-import { RegistrationInfo } from "../src/lib/Account/RegistrationInfo";
-import { InMemoryAccountRepository } from "../src/lib/Example/InMemoryAccountRepository";
-import { InMemoryVaultRepository } from "../src/lib/Example/InMemoryVaultRepository";
+import { AccountCreator } from "~/lib/Account/AccountCreator";
+import { RegistrationInfo } from "~/lib/Account/RegistrationInfo";
+import { InMemoryAccountRepository } from "~/lib/Example/InMemoryAccountRepository";
+import { InMemoryVaultRepository } from "~/lib/Example/InMemoryVaultRepository";
 import { AuthenticationFlow } from "~/lib/AuthenticationFlow";
 import { Authenticator } from "~/lib/Authentication/Authenticator";
 import { AccountUnlockKey } from "~/lib/Account/AccountUnlockKey";
