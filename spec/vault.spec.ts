@@ -1,8 +1,8 @@
 import { Vault } from "~/lib/Vault/Vault";
-import { AccountCreator } from "../src/lib/Account/AccountCreator";
-import { RegistrationInfo } from "../src/lib/Account/RegistrationInfo";
-import { InMemoryAccountRepository } from "../src/lib/Example/InMemoryAccountRepository";
-import { InMemoryVaultRepository } from "../src/lib/Example/InMemoryVaultRepository";
+import { AccountCreator } from "~/lib/Account/AccountCreator";
+import { RegistrationInfo } from "~/lib/Account/RegistrationInfo";
+import { InMemoryAccountRepository } from "~/lib/Example/InMemoryAccountRepository";
+import { InMemoryVaultRepository } from "~/lib/Example/InMemoryVaultRepository";
 import { Fixtures } from "./fixtures";
 import { KeysetDecryptor } from "~/lib/Keysets/KeysetDecryptor";
 
