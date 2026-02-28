@@ -1,10 +1,10 @@
-import { AccountCreator } from "../src/lib/Account/AccountCreator";
-import { RegistrationInfo } from "../src/lib/Account/RegistrationInfo";
-import { InMemoryAccountRepository } from "../src/lib/Example/InMemoryAccountRepository";
-import { InMemoryVaultRepository } from "../src/lib/Example/InMemoryVaultRepository";
-import { Vault } from "../src/lib/Vault/Vault";
-import { KeysetDecryptor } from "../src/lib/Keysets/KeysetDecryptor";
-import { arrayBufferToString, stringToArrayBuffer } from "../src/lib/Encoding";
+import { AccountCreator } from "~/lib/Account/AccountCreator";
+import { RegistrationInfo } from "~/lib/Account/RegistrationInfo";
+import { InMemoryAccountRepository } from "~/lib/Example/InMemoryAccountRepository";
+import { InMemoryVaultRepository } from "~/lib/Example/InMemoryVaultRepository";
+import { Vault } from "~/lib/Vault/Vault";
+import { KeysetDecryptor } from "~/lib/Keysets/KeysetDecryptor";
+import { arrayBufferToString, stringToArrayBuffer } from "~/lib/Encoding";
 import { Fixtures } from "./fixtures";
 
 describe("Account creation", () => {
