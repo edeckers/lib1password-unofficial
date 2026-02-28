@@ -147,4 +147,30 @@ export class AccountUnlockKey {
 
     return new AccountUnlockKey(emailAddress, secretKey, pbkdf2Key);
   };
+
+  public withRotatedSecretKey = (): AccountUnlockKey => {
+    const rotatedSecretKey = this.secretKey.rotate();
+    return new AccountUnlockKey(
+      this.emailAddress,
+      rotatedSecretKey,
+      this.pbkdf2Key,
+    );
+  };
+
+  public withChangedCredentials = async (
+    emailAddress: string,
+    password: string,
+  ): Promise<AccountUnlockKey> => {
+    const normalizedPassword = normalizePassword(password);
+    const pbkdf2Key = await createPbkdf2Key(normalizedPassword);
+    return new AccountUnlockKey(emailAddress, this.secretKey, pbkdf2Key);
+  };
+
+  public get email(): string {
+    return this.emailAddress;
+  }
+
+  public get secret(): SecretKey {
+    return this.secretKey;
+  }
 }

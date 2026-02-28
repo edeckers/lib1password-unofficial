@@ -135,6 +135,34 @@ console.log(
 );
 ```
 
+## API Reference
+
+### Session
+
+| Member                                      | Description                                                                                                                                               |
+| ------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `secretKey`                                 | The account's secret key                                                                                                                                  |
+| `vaults`                                    | List of unlocked vaults                                                                                                                                   |
+| `getPersonalVault()`                        | Convenience method to get the primary vault                                                                                                               |
+| `changeCredentials(emailAddress, password)` | Change email address and/or password by re-encrypting the master keyset, leaving the secret key unchanged. Returns a new Session with updated credentials |
+| `rotateSecretKey()`                         | Rotate the secret key (preserving version and accountId) and re-encrypt the master keyset. Returns a new Session with the new secret key                  |
+
+### SecretKey
+
+| Member           | Description                                                                              |
+| ---------------- | ---------------------------------------------------------------------------------------- |
+| `version`        | Secret key format version (e.g., "A3")                                                   |
+| `accountId`      | The 6-character account identifier                                                       |
+| `secret`         | The 26-character secret portion                                                          |
+| `fullWithDashes` | Formatted secret key with dashes (e.g., "A3-XXXXXX-...")                                 |
+| `rotate()`       | Generate a new secret key with the same version and accountId but different secret bytes |
+
+### AuthenticationFlow
+
+| Method                                     | Description                    |
+| ------------------------------------------ | ------------------------------ |
+| `login(emailAddress, password, secretKey)` | Authenticate and unlock vaults |
+
 ## Contributing
 
 See the [contributing guide](CONTRIBUTING.md) to learn how to contribute to the repository and the development workflow.
