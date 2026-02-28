@@ -7,5 +7,4 @@ export interface KeysetRepository {
 }
 
 export interface AccountRepository
-  extends ProfileRepository,
-    KeysetRepository {}
+  extends ProfileRepository, KeysetRepository {}
