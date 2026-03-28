@@ -1,3 +1,10 @@
+## [1.2.1](https://github.com/edeckers/lib1password-unofficial/compare/v1.2.0...v1.2.1) (2026-03-28)
+
+
+### Bug Fixes
+
+* **deps:** bump all dependencies ([#12](https://github.com/edeckers/lib1password-unofficial/issues/12)) ([43d491c](https://github.com/edeckers/lib1password-unofficial/commit/43d491c606c913a0a27e31aa1ff7b508c569d87a))
+
 # [1.2.0](https://github.com/edeckers/lib1password-unofficial/compare/v1.1.6...v1.2.0) (2026-02-28)
 
 
