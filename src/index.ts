@@ -4,6 +4,10 @@ export { ProfileRepository } from "~/lib/Profile/ProfileRepository";
 
 export { InMemoryAccountRepository } from "~/lib/Example/InMemoryAccountRepository";
 export { InMemoryVaultRepository } from "~/lib/Example/InMemoryVaultRepository";
+export {
+  SrpxAuthenticator,
+  SrpxProfileAuth,
+} from "~/lib/Example/SrpxAuthenticator";
 
 export { Authenticator } from "~/lib/Authentication/Authenticator";
 
