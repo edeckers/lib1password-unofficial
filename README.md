@@ -3,7 +3,7 @@
 [![License: MPL 2.0](https://img.shields.io/badge/License-MPL%202.0-brightgreen.svg)](https://opensource.org/licenses/MPL-2.0)
 [![Build](https://github.com/edeckers/lib1password-unofficial/actions/workflows/deploy.yml/badge.svg?branch=develop)](https://github.com/edeckers/lib1password-unofficial/actions/workflows/deploy.yml)
 
-**lib1password-unofficial is 1Password's end-to-end encryption model (Secret Key, two-secret key derivation, keysets and encrypted vaults) as a small TypeScript library you can run, read and build on.**
+**This is 1Password's end-to-end encryption model (Secret Key, two-secret key derivation, keysets and encrypted vaults) as a small TypeScript library you can run, read and build on.**
 
 Use it to:
 
