@@ -56,9 +56,9 @@ npm install @edeckers/lib1password-unofficial
 ```ts
 // Library is storage-agnostic, so user profiles, keysets,
 // and vaults can live anywhere, and storage is abstracted
-// using repositories
-const keysets = new InMemoryKeysetRepository();
-const profiles = new InMemoryProfileRepository();
+// using repositories. InMemoryAccountRepository stores both
+// keysets and profiles
+const accounts = new InMemoryAccountRepository();
 const vaults = new InMemoryVaultRepository();
 
 // Library is not concerned with authentication, so you can use
@@ -71,7 +71,7 @@ const authenticator = new SrpxAuthenticator();
 ### PHASE 1: Create and store an account
 
 ```ts
-const accountCreator = new AccountCreator(keysets, profiles, vaults);
+const accountCreator = new AccountCreator(accounts, accounts, vaults);
 
 // Generate a secret key and store it in a RegistrationInfo-object
 // together with the provided email address
@@ -99,7 +99,7 @@ await accountCreator.create(registrationInfo);
 // The AuthenticationFlow is a convenience class that
 // runs you through every step, from authentication to
 // unlocking your vaults in a single call
-const auth = new AuthenticationFlow(authenticator, keysets, profiles, vaults);
+const auth = new AuthenticationFlow(authenticator, accounts, profiles, vaults);
 
 // A successful login returns a Session object, which
 // contains a SecretKey and a list of Vault-objects. Each
