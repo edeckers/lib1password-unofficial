@@ -1,3 +1,15 @@
+# [3.0.0](https://github.com/edeckers/lib1password-unofficial/compare/v2.1.0...v3.0.0) (2026-09-25)
+
+
+### Bug Fixes
+
+* unlock group keysets, which 1Password seals to their parent's public key ([3338d58](https://github.com/edeckers/lib1password-unofficial/commit/3338d5819118659ac624b2c78c7c686c57591685))
+
+
+### BREAKING CHANGES
+
+* KeysetResponse.encSymKey may be sealed with RSA-OAEP and then has no iv, alg, p2c or p2s, so code reading those fields must check which kind it has first. Vault items open only when their kid names the vault key, and Keyset.sym.kid is the keyset's own uuid instead of the id of the key that sealed it.
+
 # [2.1.0](https://github.com/edeckers/lib1password-unofficial/compare/v2.0.0...v2.1.0) (2026-09-25)
 
 
