@@ -1,8 +1,8 @@
 import {
   InMemoryVaultRepository,
   type EncryptedVaultItem,
-  type SomeAccessData,
-  type SomeSymEncryptedData,
+  type AccessData,
+  type SymEncryptedData,
   type VaultInfo,
   type VaultRepository,
 } from '@edeckers/lib1password-unofficial';
@@ -37,8 +37,8 @@ export class DemoVaultRepository implements VaultRepository {
   public create = (
     uuid: string,
     type: string,
-    encAttrs: SomeSymEncryptedData,
-    access: SomeAccessData,
+    encAttrs: SymEncryptedData,
+    access: AccessData,
   ): Promise<void> => this.vaults.create(uuid, type, encAttrs, access);
 
   public clear = (): void => {
