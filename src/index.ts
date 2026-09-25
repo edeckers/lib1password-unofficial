@@ -1,13 +1,9 @@
 export { VaultRepository } from "~/lib/Vault/VaultRepository";
-export { KeysetRepository } from "~/lib/Account/AccountRepository";
-export { ProfileRepository } from "~/lib/Profile/ProfileRepository";
-
-export { InMemoryAccountRepository } from "~/lib/Example/InMemoryAccountRepository";
-export { InMemoryVaultRepository } from "~/lib/Example/InMemoryVaultRepository";
 export {
-  SrpxAuthenticator,
-  SrpxProfileAuth,
-} from "~/lib/Example/SrpxAuthenticator";
+  AccountRepository,
+  KeysetRepository,
+} from "~/lib/Account/AccountRepository";
+export { ProfileRepository } from "~/lib/Profile/ProfileRepository";
 
 export { Authenticator } from "~/lib/Authentication/Authenticator";
 
@@ -27,7 +23,11 @@ export {
   VaultInfo,
 } from "~/lib/Vault/Entities";
 
-export { KeysetResponse } from "~/lib/Keysets/Entities";
+export {
+  Keyset,
+  KeysetResponse,
+  SomeEncryptedData,
+} from "~/lib/Keysets/Entities";
 export { AuthenticationFlow } from "~/lib/AuthenticationFlow";
 export { RegistrationInfo } from "~/lib/Account/RegistrationInfo";
 export { SecretKey } from "~/lib/Account/SecretKey";

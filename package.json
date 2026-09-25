@@ -22,6 +22,11 @@
       "import": "./dist/index.esm.js",
       "require": "./dist/index.cjs",
       "types": "./dist/index.d.ts"
+    },
+    "./examples": {
+      "import": "./dist/examples.esm.js",
+      "require": "./dist/examples.cjs",
+      "types": "./dist/examples.d.ts"
     }
   },
   "sideEffects": false,

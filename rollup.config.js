@@ -5,9 +5,11 @@ import { dts } from "rollup-plugin-dts";
 import pkg from "./package.json" with { type: "json" };
 import strip from "@rollup/plugin-strip";
 
+const input = { index: pkg.source, examples: "src/examples.ts" };
+
 export default [
   {
-    input: pkg.source,
+    input,
 
     plugins: [
       // Keep typescript step, so that path aliases are resolved
@@ -19,10 +21,17 @@ export default [
       }),
       dts(),
     ],
-    output: [{ file: "dist/index.d.ts", format: "es" }],
+    output: [
+      {
+        dir: "dist",
+        format: "es",
+        entryFileNames: "[name].d.ts",
+        chunkFileNames: "[name]-[hash].d.ts",
+      },
+    ],
   },
   {
-    input: pkg.source,
+    input,
 
     plugins: [
       typescript({
@@ -41,8 +50,18 @@ export default [
       })
     ],
     output: [
-      { file: pkg.main, format: "cjs" },
-      { file: pkg.module, format: "esm" },
+      {
+        dir: "dist",
+        format: "cjs",
+        entryFileNames: "[name].cjs",
+        chunkFileNames: "[name]-[hash].cjs",
+      },
+      {
+        dir: "dist",
+        format: "esm",
+        entryFileNames: "[name].esm.js",
+        chunkFileNames: "[name]-[hash].esm.js",
+      },
     ],
   },
 ];
