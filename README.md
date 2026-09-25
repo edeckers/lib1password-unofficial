@@ -64,8 +64,23 @@ const vaults = new InMemoryVaultRepository();
 // Library is not concerned with authentication, so you can use
 // an authentication backend of your choosing by implementing the
 // Authenticator interface, e.g. authentication through SRP, which
-// is what 1Password uses.
-const authenticator = new SrpxAuthenticator();
+// is what 1Password uses. The example SrpxAuthenticator looks up an
+// account's auth parameters (salt, iterations), derives a key from
+// them, and hands that key to your server
+const profileAuths = new Map<string, SrpxProfileAuth>();
+const authenticator = new SrpxAuthenticator(
+  async (accountId) => {
+    const profileAuth = profileAuths.get(accountId);
+    if (!profileAuth) {
+      throw new Error(`No auth parameters for account ${accountId}`);
+    }
+
+    return profileAuth;
+  },
+  async (srpxKey) => {
+    // Send srpxKey to your server and throw if authentication fails
+  },
+);
 ```
 
 ### PHASE 1: Create and store an account
@@ -85,6 +100,10 @@ const registrationInfo = await RegistrationInfo.create(
 // on, and be stored securely by the user. We'll
 // use it to unlock our vault in PHASE 2
 const { secretKey } = registrationInfo;
+
+// Your server keeps the auth parameters it needs to verify the
+// account's future logins
+profileAuths.set(secretKey.accountId, authenticator.createProfileAuth());
 
 // Generate a master keyset and an empty personal vault, encrypted
 // with your Account User Token (AUK, combination of
