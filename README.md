@@ -34,6 +34,21 @@ flowchart TD
 
 Everything from the master keyset down is stored on the server, encrypted. The Account Unlock Key is never stored or sent anywhere: your device derives it from your password _and_ your Secret Key, 128 bits of randomness generated on your device. Someone who steals the server's data can't brute-force your password to decrypt it, because without the Secret Key every password guess is also a guess at those 128 random bits.
 
+### Reading along with the white paper
+
+Each concept from the [white paper](https://1passwordstatic.com/files/security/1password-white-paper.pdf) lives in one place in the code, so you can read the two side by side:
+
+| Concept                                                              | Code                                                                                                                   |
+| -------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| Secret Key: generation, format, obfuscation and rotation             | [`SecretKey.ts`](src/lib/Account/SecretKey.ts)                                                                         |
+| Two-Secret Key Derivation: password + Secret Key → AUK               | [`AccountUnlockKey.ts`](src/lib/Account/AccountUnlockKey.ts)                                                           |
+| Account creation: master keyset, RSA key pair and personal vault     | [`AccountCreator.ts`](src/lib/Account/AccountCreator.ts)                                                               |
+| Unlocking keysets with the AUK                                       | [`KeysetDecryptor.ts`](src/lib/Keysets/KeysetDecryptor.ts), [`EncryptedKeyset.ts`](src/lib/Keysets/EncryptedKeyset.ts) |
+| Vault keys and encrypted items                                       | [`Vault.ts`](src/lib/Vault/Vault.ts)                                                                                   |
+| Changing your password or rotating your Secret Key                   | [`Session.ts`](src/lib/Session.ts)                                                                                     |
+| AES-256-GCM primitives                                               | [`Encryption.ts`](src/lib/Encryption.ts)                                                                               |
+| Authentication, which the library leaves to you (1Password uses SRP) | [`SrpxAuthenticator.ts`](src/lib/Example/SrpxAuthenticator.ts), an example                                             |
+
 ## Installation
 
 ```bash
