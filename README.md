@@ -99,7 +99,7 @@ await accountCreator.create(registrationInfo);
 // The AuthenticationFlow is a convenience class that
 // runs you through every step, from authentication to
 // unlocking your vaults in a single call
-const auth = new AuthenticationFlow(authenticator, accounts, profiles, vaults);
+const auth = new AuthenticationFlow(authenticator, accounts, vaults);
 
 // A successful login returns a Session object, which
 // contains a SecretKey and a list of Vault-objects. Each
