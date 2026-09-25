@@ -1,3 +1,16 @@
+# [2.1.0](https://github.com/edeckers/lib1password-unofficial/compare/v2.0.0...v2.1.0) (2026-09-25)
+
+
+### Bug Fixes
+
+* **deps:** bump all dependencies ([c86ee97](https://github.com/edeckers/lib1password-unofficial/commit/c86ee979dfc52e29baf569f4ff45cce690f821c9))
+* export SrpxAuthenticator referenced in the README ([3e9eaa1](https://github.com/edeckers/lib1password-unofficial/commit/3e9eaa13384b7aa8627bd769c94813394f150653))
+
+
+### Features
+
+* move example implementations to a separate examples entry point ([9630fba](https://github.com/edeckers/lib1password-unofficial/commit/9630fbae7d63a34babe4e3cf652b5637faf44c8c))
+
 # [2.0.0](https://github.com/edeckers/lib1password-unofficial/compare/v1.2.1...v2.0.0) (2026-09-25)
 
 
