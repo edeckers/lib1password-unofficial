@@ -3,7 +3,15 @@
 [![License: MPL 2.0](https://img.shields.io/badge/License-MPL%202.0-brightgreen.svg)](https://opensource.org/licenses/MPL-2.0)
 [![Build](https://github.com/edeckers/lib1password-unofficial/actions/workflows/deploy.yml/badge.svg?branch=develop)](https://github.com/edeckers/lib1password-unofficial/actions/workflows/deploy.yml)
 
-**How can a password manager have its entire server database stolen and still keep your vault safe?** This library answers that with a working TypeScript implementation of 1Password's security model. It's faithful enough that you could copy encrypted items out of your real 1Password vault and decrypt them with your own credentials (don't, obviously). It's built to learn from: read the code side by side with [1Password's white paper](https://1passwordstatic.com/files/security/1password-white-paper.pdf), or step through it in your browser.
+**lib1password-unofficial is 1Password's end-to-end encryption model (Secret Key, two-secret key derivation, keysets and encrypted vaults) as a small TypeScript library you can run, read and build on.**
+
+Use it to:
+
+- **Understand zero-knowledge encryption** by running it instead of reading about it, and see how a password manager can have its entire server database stolen and still keep your vault safe
+- **Prototype your own end-to-end encrypted app** on a proven design: storage and authentication are interfaces, so it plugs into whatever backend you have
+- **Teach or write about it** with working code and an interactive explainer to point to
+
+It follows [1Password's white paper](https://1passwordstatic.com/files/security/1password-white-paper.pdf) closely enough that you could decrypt items from your real 1Password vault with your own credentials.
 
 <p align="center">
   <a href="https://passwords.lgtm.it"><img src="docs/images/explainer-auk.png" alt="The interactive explainer deriving an Account Unlock Key from a password and a Secret Key" width="600"></a>
@@ -15,7 +23,7 @@
 - **Blogpost:** [Read on Medium](https://medium.com/@edeckers/stopping-bad-actors-inside-1passwords-security-model-8c65c6acb9ff)
 - **Explainer source:** https://github.com/edeckers/lib1password-unofficial/tree/gh-pages
 
-> ⚠️ Educational and unaudited: don't use it to protect real secrets. The 1Password team greenlit its publication, but neither this library nor the explainer is an official product developed or maintained by AgileBits, Inc. See [Disclaimers](#disclaimers).
+Published with the 1Password team's blessing, though it's not an official product developed or maintained by AgileBits, Inc.
 
 ## How it works
 
@@ -218,14 +226,12 @@ console.log(
 
 ## Disclaimers
 
-This is an **educational project** created to understand how password managers and 1Password in particular work under the hood.
-
-**NOT for production use:**
+This library is provided as is, without warranty of any kind; see the [license](LICENSE). It hasn't been audited, so have it reviewed before it protects real people's secrets.
 
 - Built by someone who is not a security expert or cryptographer
-- Not affiliated with 1Password
 - Not audited or reviewed by security professionals
 - May contain implementation errors or vulnerabilities
+- Not affiliated with 1Password
 
 ## Rationale
 
