@@ -156,7 +156,7 @@ if (!vault) {
 // Decrypt all vault items, and return them as a list
 const items = await vault.readAllItems();
 
-// Each item has an id (string) and encrypted
+// Each item has an id (string) and decrypted
 // data (ArrayBuffer). Use .serialize() to get
 // the plaintext string
 console.log(
