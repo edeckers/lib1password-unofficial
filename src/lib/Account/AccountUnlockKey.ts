@@ -3,13 +3,10 @@ import { SecretKey } from "~/lib/Account/SecretKey";
 import { assert, assertHasValue } from "~/lib/Utils";
 import { stringToArrayBuffer } from "~/lib/Encoding";
 
-const normalizePassword = (rawPassword: string) => {
-  const passwordWithoutTrailingOrLeadingSpaces = rawPassword.trim();
-
-  // "[normalize] to a UTF-8 byte string using Unicode Normalization
-  // Form Compatibility Decomposition (NFKD) normalization." (1Password White Paper)
-  return passwordWithoutTrailingOrLeadingSpaces;
-};
+// "[normalize] to a UTF-8 byte string using Unicode Normalization
+// Form Compatibility Decomposition (NFKD) normalization." (1Password White Paper)
+const normalizePassword = (rawPassword: string) =>
+  rawPassword.trim().normalize("NFKD");
 
 const xorArrays = (maybeA0: Uint8Array, maybeA1: Uint8Array) => {
   const a0 = assertHasValue(maybeA0);
