@@ -1,4 +1,4 @@
-import { InMemoryAccountRepository } from '@edeckers/lib1password-unofficial';
+import { InMemoryAccountRepository } from '@edeckers/lib1password-unofficial/examples';
 import type {
   KeysetRepository,
   KeysetResponse,

@@ -1,5 +1,5 @@
+import { InMemoryVaultRepository } from '@edeckers/lib1password-unofficial/examples';
 import {
-  InMemoryVaultRepository,
   type EncryptedVaultItem,
   type AccessData,
   type SymEncryptedData,
