@@ -49,7 +49,7 @@
     "format:fix": "prettier --write \"src/**/*.{ts,tsx,json,md}\" \"*.{json,md}\"",
     "lint": "eslint src --ext .ts,.tsx",
     "lint:fix": "eslint src --ext .ts,.tsx --fix",
-    "preinstall": "node -e \"console.error('\\n\\x1b[41m\\x1b[37m WARNING \\x1b[0m \\x1b[31mDO NOT USE LIB1PASSWORD-UNOFFICIAL IN PRODUCTION\\x1b[0m\\n\\nWhile the 1Password Team greenlit publication of this library, it is not an official product developed or maintained by AgileBits, Inc.\\n')\"",
+    "preinstall": "node -e \"console.error('\\n\\x1b[43m\\x1b[30m WARNING \\x1b[0m \\x1b[33mlib1password-unofficial has not been audited. Have it reviewed before using it to protect real secrets.\\x1b[0m\\n\\nIt is published with the blessing of the 1Password team, but it is not an official product developed or maintained by AgileBits, Inc.\\n')\"",
     "prepublishOnly": "npm run clean && npm run build",
     "prepack": "npm run build",
     "prepare": "husky",
