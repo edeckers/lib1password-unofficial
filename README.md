@@ -33,16 +33,16 @@ Your vault items are encrypted with a vault key, the vault key with your keyset,
 
 Each concept from the [white paper](https://1passwordstatic.com/files/security/1password-white-paper.pdf) lives in one place in the code, so you can read the two side by side:
 
-| Concept                                                              | Code                                                                                                                   |
-| -------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
-| Secret Key: generation, format, obfuscation and rotation             | [`SecretKey.ts`](src/lib/Account/SecretKey.ts)                                                                         |
-| Two-Secret Key Derivation: password + Secret Key → AUK               | [`AccountUnlockKey.ts`](src/lib/Account/AccountUnlockKey.ts)                                                           |
-| Account creation: master keyset, RSA key pair and personal vault     | [`AccountCreator.ts`](src/lib/Account/AccountCreator.ts)                                                               |
-| Unlocking keysets with the AUK                                       | [`KeysetDecryptor.ts`](src/lib/Keysets/KeysetDecryptor.ts), [`EncryptedKeyset.ts`](src/lib/Keysets/EncryptedKeyset.ts) |
-| Vault keys and encrypted items                                       | [`Vault.ts`](src/lib/Vault/Vault.ts)                                                                                   |
-| Changing your password or rotating your Secret Key                   | [`Session.ts`](src/lib/Session.ts)                                                                                     |
-| AES-256-GCM primitives                                               | [`Encryption.ts`](src/lib/Encryption.ts)                                                                               |
-| Authentication, which the library leaves to you (1Password uses SRP) | [`SrpxAuthenticator.ts`](src/lib/Example/SrpxAuthenticator.ts), an example                                             |
+| Concept                                                              | Code                                                                                                                                                               |
+| -------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Secret Key: generation, format, obfuscation and rotation             | [`SecretKey.ts`](src/lib/Account/SecretKey.ts)                                                                                                                     |
+| Two-Secret Key Derivation: password + Secret Key → AUK               | [`AccountUnlockKey.ts`](src/lib/Account/AccountUnlockKey.ts)                                                                                                       |
+| Account creation: master keyset, RSA key pair and personal vault     | [`AccountCreator.ts`](src/lib/Account/AccountCreator.ts)                                                                                                           |
+| Unlocking keysets with the AUK, including group keysets              | [`KeysetDecryptor.ts`](src/lib/Keysets/KeysetDecryptor.ts), [`EncryptedKeyset.ts`](src/lib/Keysets/EncryptedKeyset.ts), [`Keyring.ts`](src/lib/Keysets/Keyring.ts) |
+| Vault keys and encrypted items                                       | [`Vault.ts`](src/lib/Vault/Vault.ts)                                                                                                                               |
+| Changing your password or rotating your Secret Key                   | [`Session.ts`](src/lib/Session.ts)                                                                                                                                 |
+| AES-256-GCM primitives                                               | [`Encryption.ts`](src/lib/Encryption.ts)                                                                                                                           |
+| Authentication, which the library leaves to you (1Password uses SRP) | [`SrpxAuthenticator.ts`](src/lib/Example/SrpxAuthenticator.ts), an example                                                                                         |
 
 ## Installation
 

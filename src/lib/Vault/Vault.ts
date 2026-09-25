@@ -1,11 +1,8 @@
 import { AccessData, KeyWithMeta, VaultInfo } from "~/lib/Vault/Entities";
 import { VaultRepository } from "~/lib/Vault/VaultRepository";
-import {
-  decryptSymmetric,
-  encryptSymmetric,
-  importCryptoKeyFromJwk,
-} from "~/lib/Encryption";
+import { encryptSymmetric, importCryptoKeyFromJwk } from "~/lib/Encryption";
 import { KeysetDecryptor } from "~/lib/Keysets/KeysetDecryptor";
+import { Keyring } from "~/lib/Keysets/Keyring";
 import { arrayBufferToString } from "~/lib/Encoding";
 
 class VaultItem {
@@ -30,6 +27,7 @@ export class Vault {
   private constructor(
     private readonly vaultRepository: VaultRepository,
     private readonly vaultKey: KeyWithMeta,
+    private readonly keyring: Keyring,
     public readonly uuid: string,
     public readonly name: string,
     access: AccessData[],
@@ -46,7 +44,7 @@ export class Vault {
       this.uuid,
       id,
     );
-    const data = await decryptSymmetric(this.vaultKey.k, encryptedVaultItem);
+    const data = await this.keyring.open(encryptedVaultItem);
 
     return new VaultItem(id, data);
   }
@@ -85,14 +83,19 @@ export class Vault {
 
       const vaultKeyJson = JSON.parse(arrayBufferToString(vaultKeyBytes));
       const vaultKey = await importCryptoKeyFromJwk(vaultKeyJson, true);
+      const keyring = Keyring.empty.withSymmetricKey(
+        vaultKeyJson.kid,
+        vaultKey,
+      );
 
-      const attrsBytes = await decryptSymmetric(vaultKey, vault.encAttrs);
+      const attrsBytes = await keyring.open(vault.encAttrs);
 
       const attrs = JSON.parse(arrayBufferToString(attrsBytes));
 
       return new Vault(
         vaultRepository,
         { kid: vaultKeyJson.kid, k: vaultKey },
+        keyring,
         vault.uuid,
         attrs.name,
         vault.access,

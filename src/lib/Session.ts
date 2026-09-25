@@ -2,6 +2,7 @@ import { KeysetRepository } from "~/lib/Account/AccountRepository";
 import { AccountUnlockKey } from "~/lib/Account/AccountUnlockKey";
 import { SecretKey } from "~/lib/Account/SecretKey";
 import { KeysetDecryptor } from "~/lib/Keysets/KeysetDecryptor";
+import { isPasswordEncrypted } from "~/lib/Keysets/Entities";
 import { Vault } from "~/lib/Vault/Vault";
 import { VaultRepository } from "~/lib/Vault/VaultRepository";
 import {
@@ -37,6 +38,11 @@ class Rekeyer {
     }
 
     const { encSymKey } = masterKeyset;
+
+    if (!isPasswordEncrypted(encSymKey)) {
+      throw new Error("Master keyset is not sealed by the Account Unlock Key");
+    }
+
     const originalSalt = base64decode(encSymKey.p2s);
     const iterations = encSymKey.p2c;
 

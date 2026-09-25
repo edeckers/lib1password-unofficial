@@ -1,9 +1,8 @@
-import { SYMMETRIC_KEY_ENCRYPTION_ALGORITHM } from "~/Consts";
 import { importCryptoKeyFromJwk } from "~/lib/Encryption";
-import { arrayBufferToString, base64decode } from "~/lib/Encoding";
-import { AccountUnlockKey } from "~/lib/Account/AccountUnlockKey";
+import { arrayBufferToString } from "~/lib/Encoding";
 import { Keyset } from "~/lib/Keysets/Entities";
 import { KeysetResponse } from "~/lib/Keysets/Entities";
+import { Keyring } from "~/lib/Keysets/Keyring";
 
 export class EncryptedKeyset {
   private constructor(private readonly keyset: KeysetResponse) {}
@@ -11,35 +10,24 @@ export class EncryptedKeyset {
   public static fromResponse = (response: KeysetResponse) =>
     new EncryptedKeyset(response);
 
-  public decrypt = async (key: CryptoKey): Promise<Keyset> => {
-    const { encSymKey, encPriKey, pubKey } = this.keyset;
-
-    const symKeyBytes = await crypto.subtle.decrypt(
-      {
-        name: SYMMETRIC_KEY_ENCRYPTION_ALGORITHM,
-        iv: base64decode(encSymKey.iv),
-      },
-      key,
-      base64decode(encSymKey.data),
-    );
+  /**
+   * Opens the keyset with a key already on the keyring, and returns the
+   * keyring with the keyset's own symmetric and private keys added.
+   */
+  public open = async (
+    keyring: Keyring,
+  ): Promise<{ keyring: Keyring; keyset: Keyset }> => {
+    const { uuid, encSymKey, encPriKey, pubKey } = this.keyset;
 
     const symKey = await importCryptoKeyFromJwk(
-      JSON.parse(arrayBufferToString(symKeyBytes)),
+      JSON.parse(arrayBufferToString(await keyring.open(encSymKey))),
       true,
     );
-
-    const priKeyBytes = await crypto.subtle.decrypt(
-      {
-        name: SYMMETRIC_KEY_ENCRYPTION_ALGORITHM,
-        iv: base64decode(encPriKey.iv),
-      },
-      symKey,
-      base64decode(encPriKey.data),
-    );
+    const withSymKey = keyring.withSymmetricKey(uuid, symKey);
 
     const priKey = await crypto.subtle.importKey(
       "jwk",
-      JSON.parse(arrayBufferToString(priKeyBytes)),
+      JSON.parse(arrayBufferToString(await withSymKey.open(encPriKey))),
       { name: "RSA-OAEP", hash: "SHA-1" },
       true,
       ["decrypt"],
@@ -54,22 +42,12 @@ export class EncryptedKeyset {
     );
 
     return {
-      sym: { kid: encSymKey.kid, k: symKey },
-      pri: { kid: encPriKey.kid, k: priKey },
-      pub: { kid: pubKey.kid, k: pubKeyC },
+      keyring: withSymKey.withPrivateKey(uuid, priKey),
+      keyset: {
+        sym: { kid: uuid, k: symKey },
+        pri: { kid: uuid, k: priKey },
+        pub: { kid: pubKey.kid, k: pubKeyC },
+      },
     };
-  };
-
-  public decryptMaster = async (
-    accountUnlockKey: AccountUnlockKey,
-  ): Promise<Keyset> => {
-    const { encSymKey } = this.keyset;
-
-    const auk = await accountUnlockKey.derive(
-      encSymKey.p2c,
-      base64decode(encSymKey.p2s),
-    );
-
-    return this.decrypt(auk);
   };
 }

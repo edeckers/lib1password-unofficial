@@ -4,6 +4,7 @@ import {
 } from "~/Consts";
 
 import {
+  AsymEncryptedData,
   EncryptedVaultItem,
   KeyWithMeta,
   SymEncryptedData,
@@ -68,6 +69,16 @@ export const decryptSymmetric = async (
       iv: base64decode(message.iv),
     },
     symKey,
+    base64decode(message.data),
+  );
+
+export const decryptAsymmetric = async (
+  priKey: CryptoKey,
+  message: AsymEncryptedData,
+) =>
+  await crypto.subtle.decrypt(
+    { name: "RSA-OAEP" },
+    priKey,
     base64decode(message.data),
   );
 

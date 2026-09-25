@@ -14,7 +14,7 @@ import {
   generateSymKey,
 } from "~/lib/Encryption";
 import { base64encode, stringToArrayBuffer } from "~/lib/Encoding";
-import { EncryptedKeyset } from "~/lib/Keysets/EncryptedKeyset";
+import { KeysetDecryptor } from "~/lib/Keysets/KeysetDecryptor";
 import { ProfileRepository } from "~/lib/Profile/ProfileRepository";
 import { KeyWithMeta, AsymEncryptedData } from "~/lib/Vault/Entities";
 import { KeysetResponse } from "~/lib/Keysets/Entities";
@@ -197,9 +197,8 @@ export class AccountCreator {
       throw new Error("Failed to read back created keyset");
     }
 
-    const encryptedKeyset = EncryptedKeyset.fromResponse(masterKeyset);
-
-    const { pub } = await encryptedKeyset.decryptMaster(auk);
+    const decryptor = await KeysetDecryptor.unlock(auk, [masterKeyset]);
+    const { pub } = decryptor.encryptedKeyset[masterKeyset.uuid];
     logger.info("Retrieved keyset");
 
     logger.info("Creating profile");
