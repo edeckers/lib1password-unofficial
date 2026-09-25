@@ -116,7 +116,7 @@ const { secretKey } = registrationInfo;
 profileAuths.set(secretKey.accountId, authenticator.createProfileAuth());
 
 // Generate a master keyset and an empty personal vault, encrypted
-// with your Account User Token (AUK, combination of
+// with your Account Unlock Key (AUK, combination of
 // password + secret key). Store this encrypted data in the provided
 // repositories
 await accountCreator.create(registrationInfo);
