@@ -20,7 +20,7 @@ It follows [1Password's white paper](https://1passwordstatic.com/files/security/
 <p align="center"><b><a href="https://passwords.lgtm.it">Try the interactive explainer →</a></b></p>
 
 - **Featured on TypeScript.fm:** [Episode 39 (33m25s)](https://typescript.fm/39#t=33m25s)
-- **Blogpost:** [Read on Medium](https://medium.com/@edeckers/stopping-bad-actors-inside-1passwords-security-model-8c65c6acb9ff)
+- **Blogpost:** [Stopping bad actors: inside 1Password’s security model](https://medium.com/@edeckers/stopping-bad-actors-inside-1passwords-security-model-8c65c6acb9ff)
 - **Explainer source:** https://github.com/edeckers/lib1password-unofficial/tree/gh-pages
 
 Published with the 1Password team's blessing, though it's not an official product developed or maintained by AgileBits, Inc.
