@@ -7,9 +7,10 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "outDir": "./dist",
     "resolveJsonModule": true,
+    "types": ["node", "jasmine"],
     "paths": {
       "~/*": ["./src/*"]
     }
