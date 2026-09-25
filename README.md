@@ -149,6 +149,9 @@ const session = await auth.login(
 // convenience method session.getPersonalVault() to
 // retrieve your primary Vault
 const vault = session.getPersonalVault();
+if (!vault) {
+  throw new Error("Account has no personal vault");
+}
 
 // Decrypt all vault items, and return them as a list
 const items = await vault.readAllItems();
