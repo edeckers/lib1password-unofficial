@@ -51,8 +51,18 @@ Each concept from the [white paper](https://1passwordstatic.com/files/security/1
 
 ## Installation
 
+The package is published to GitHub Packages, which requires a GitHub token with the `read:packages` scope, even for public packages. Point the `@edeckers` scope at GitHub Packages in your project's `.npmrc`:
+
+```ini
+@edeckers:registry=https://npm.pkg.github.com
+//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
+```
+
+Then install it with a token in `GITHUB_TOKEN`. If you use the GitHub CLI, you can grant its token the scope and use that:
+
 ```bash
-npm install @edeckers/lib1password-unofficial
+gh auth refresh --scopes read:packages
+GITHUB_TOKEN=$(gh auth token) npm install @edeckers/lib1password-unofficial
 ```
 
 ## Quick Start
