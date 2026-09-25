@@ -1,4 +1,13 @@
-const base64encode = (bytes: Uint8Array) => {
+// Written as base64url without padding (RFC 4648 section 5), as 1Password and
+// JOSE write it. Read in either alphabet: the two share no characters, and
+// vaults written by earlier versions of this library use the standard one.
+const toBase64Url = (standardBase64: string) =>
+  standardBase64.replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+
+const toStandardBase64 = (base64: string) =>
+  base64.replace(/-/g, "+").replace(/_/g, "/");
+
+const toStandardBase64FromBytes = (bytes: Uint8Array) => {
   if (typeof window !== "undefined") {
     return window.btoa(String.fromCharCode(...bytes));
   }
@@ -7,7 +16,12 @@ const base64encode = (bytes: Uint8Array) => {
   return Buffer.from(bytes).toString("base64");
 };
 
-const base64decode = (str: string) => {
+const base64encode = (bytes: Uint8Array) =>
+  toBase64Url(toStandardBase64FromBytes(bytes));
+
+const base64decode = (base64: string) => {
+  const str = toStandardBase64(base64);
+
   if (typeof window !== "undefined") {
     const binaryString = window.atob(str);
     const len = binaryString.length;
