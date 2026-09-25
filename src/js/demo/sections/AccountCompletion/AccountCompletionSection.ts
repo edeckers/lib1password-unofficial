@@ -92,7 +92,7 @@ const displayGeneratedKeys = async (
     const masterKeyset = keysets[0];
 
     if (masterKeyset) {
-      $mpPreview.textContent = `${masterKeyset.encSymKey?.data.substring(0, 16)}... (Encrypted, ${masterKeyset.encSymKey.alg})`;
+      $mpPreview.textContent = `${masterKeyset.encSymKey?.data.substring(0, 16)}... (Encrypted, ${'alg' in masterKeyset.encSymKey ? masterKeyset.encSymKey.alg : masterKeyset.encSymKey.enc})`;
       $publicKeyPreview.textContent = `${masterKeyset.pubKey.kid.substring(0, 16)}... (${masterKeyset.pubKey?.alg || 'RSA'})`;
       $privateKeyPreview.textContent = `${masterKeyset.encPriKey?.data.substring(0, 16)}... (Encrypted, ${masterKeyset.encPriKey.enc})`;
     }

@@ -23,7 +23,7 @@
     "vite": "^7"
   },
   "dependencies": {
-    "@edeckers/lib1password-unofficial": "^2.1.0",
+    "@edeckers/lib1password-unofficial": "^3.0.0",
     "vanilla-cookieconsent": "^3"
   },
   "private": true
