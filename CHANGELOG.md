@@ -1,3 +1,15 @@
+# [2.0.0](https://github.com/edeckers/lib1password-unofficial/compare/v1.2.1...v2.0.0) (2026-09-25)
+
+
+### Bug Fixes
+
+* normalize passwords with NFKD and write binary values as base64url ([#13](https://github.com/edeckers/lib1password-unofficial/issues/13)) ([8cb9616](https://github.com/edeckers/lib1password-unofficial/commit/8cb9616a0010b510684cbfdf71178e3114e74a1f))
+
+
+### BREAKING CHANGES
+
+* passwords are now NFKD-normalized before key derivation. A password containing characters that NFKD rewrites, such as a precomposed é or a ligature like ﬁ, derives a different key than before, so accounts created with one on an earlier version no longer unlock. ASCII passwords are unaffected.
+
 ## [1.2.1](https://github.com/edeckers/lib1password-unofficial/compare/v1.2.0...v1.2.1) (2026-03-28)
 
 
