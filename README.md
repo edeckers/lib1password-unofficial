@@ -57,12 +57,17 @@ npm install @edeckers/lib1password-unofficial
 import {
   AccountCreator,
   AuthenticationFlow,
+  RegistrationInfo,
+} from "@edeckers/lib1password-unofficial";
+
+// Example implementations of the storage and authentication
+// interfaces, meant for experimenting rather than real use
+import {
   InMemoryAccountRepository,
   InMemoryVaultRepository,
-  RegistrationInfo,
   SrpxAuthenticator,
   SrpxProfileAuth,
-} from "@edeckers/lib1password-unofficial";
+} from "@edeckers/lib1password-unofficial/examples";
 
 // Library is storage-agnostic, so user profiles, keysets,
 // and vaults can live anywhere, and storage is abstracted
