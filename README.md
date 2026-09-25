@@ -27,20 +27,7 @@ Published with the 1Password team's blessing, though it's not an official produc
 
 ## How it works
 
-```mermaid
-flowchart TD
-  password["Account Password"] -->|"trim + NFKD normalization"| pbkdf2["PBKDF2-HMAC-SHA256<br/>650,000 iterations"]
-  salt["Salt + email address"] -->|"HKDF-SHA256"| pbkdf2
-  secretKey["Secret Key<br/>(never leaves your device)"] -->|"HKDF-SHA256"| xor(("XOR"))
-  pbkdf2 --> xor
-  xor --> auk["Account Unlock Key (AUK)"]
-  auk -->|"decrypts (AES-256-GCM)"| symKey["Master keyset:<br/>symmetric key"]
-  symKey -->|"decrypts (AES-256-GCM)"| priKey["Master keyset:<br/>RSA-OAEP private key"]
-  priKey -->|"decrypts (RSA-OAEP)"| vaultKey["Vault key"]
-  vaultKey -->|"decrypts (AES-256-GCM)"| items["Vault items"]
-```
-
-Everything from the master keyset down is stored on the server, encrypted. The Account Unlock Key is never stored or sent anywhere: your device derives it from your password _and_ your Secret Key, 128 bits of randomness generated on your device. Someone who steals the server's data can't brute-force your password to decrypt it, because without the Secret Key every password guess is also a guess at those 128 random bits.
+Your vault items are encrypted with a vault key, the vault key with your keyset, and your keyset with your Account Unlock Key (AUK). The server stores all of these, encrypted. The AUK itself is never stored or sent anywhere: your device derives it from your password _and_ your Secret Key, 128 bits of randomness generated on your device. Someone who steals the server's data can't brute-force your password to decrypt it, because without the Secret Key every password guess is also a guess at those 128 random bits.
 
 ### Reading along with the white paper
 
