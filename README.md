@@ -3,45 +3,19 @@
 [![License: MPL 2.0](https://img.shields.io/badge/License-MPL%202.0-brightgreen.svg)](https://opensource.org/licenses/MPL-2.0)
 [![Build](https://github.com/edeckers/lib1password-unofficial/actions/workflows/deploy.yml/badge.svg?branch=develop)](https://github.com/edeckers/lib1password-unofficial/actions/workflows/deploy.yml)
 
-This repository contains an educational TypeScript implementation of 1Password's cryptographic security model, including an interactive explainer that is available at [https://passwords.lgtm.it](https://passwords.lgtm.it)
+**How can a password manager have its entire server database stolen and still keep your vault safe?** This library answers that with a working TypeScript implementation of 1Password's security model. It's faithful enough that you could copy encrypted items out of your real 1Password vault and decrypt them with your own credentials (don't, obviously). It's built to learn from: read the code side by side with [1Password's white paper](https://1passwordstatic.com/files/security/1password-white-paper.pdf), or step through it in your browser.
 
-> ⚠️ While the 1Password Team greenlit publication of this library and the accompanying demo, neither is an official product developed or maintained by AgileBits, Inc.
+<p align="center">
+  <a href="https://passwords.lgtm.it"><img src="docs/images/explainer-auk.png" alt="The interactive explainer deriving an Account Unlock Key from a password and a Secret Key" width="600"></a>
+</p>
 
-The interactive explainer aims to clarify how 1Password protects your data by exploring a working implementation of:
+<p align="center"><b><a href="https://passwords.lgtm.it">Try the interactive explainer →</a></b></p>
 
-1. Secret Key generation and validation
-1. PBKDF2 key derivation
-1. AES-256-GCM vault encryption
-1. Master/Account keyset architecture
-
----
-
-- **Blogpost:** https://medium.com/@edeckers/stopping-bad-actors-inside-1passwords-security-model-8c65c6acb9ff
-- **Explainer source:** https://github.com/edeckers/lib1password-unofficial/tree/gh-pages
 - **Featured on TypeScript.fm:** [Episode 39 (33m25s)](https://typescript.fm/39#t=33m25s)
+- **Blogpost:** [Read on Medium](https://medium.com/@edeckers/stopping-bad-actors-inside-1passwords-security-model-8c65c6acb9ff)
+- **Explainer source:** https://github.com/edeckers/lib1password-unofficial/tree/gh-pages
 
-## Disclaimers
-
-This is an **educational project** created to understand how password managers and 1Password in particular work under the hood.
-
-**NOT for production use:**
-
-- Built by someone who is not a security expert or cryptographer
-- Not affiliated with 1Password
-- Not audited or reviewed by security professionals
-- May contain implementation errors or vulnerabilities
-
-## Rationale
-
-For years, I've used password managers, which got me curious about how they work under the hood. And to me the best way to truly understand something is to actually build it. So I created this library to:
-
-1. Understand the model: how do Secret Keys, Keysets and Vaults work together?
-1. Share knowledge: an interactive demo helps others learn too
-
-## Features
-
-- Accurate implementation of 1Password's documented security model: you could copy your actual encrypted vault items from 1Password and decrypt them using your credentials and this library (don't do this, obviously)
-- Interactive demo showing each step from account creations, to encryption and decryption
+> ⚠️ Educational and unaudited: don't use it to protect real secrets. The 1Password team greenlit its publication, but neither this library nor the explainer is an official product developed or maintained by AgileBits, Inc. See [Disclaimers](#disclaimers).
 
 ## Installation
 
@@ -199,6 +173,24 @@ console.log(
 | Method                                     | Description                    |
 | ------------------------------------------ | ------------------------------ |
 | `login(emailAddress, password, secretKey)` | Authenticate and unlock vaults |
+
+## Disclaimers
+
+This is an **educational project** created to understand how password managers and 1Password in particular work under the hood.
+
+**NOT for production use:**
+
+- Built by someone who is not a security expert or cryptographer
+- Not affiliated with 1Password
+- Not audited or reviewed by security professionals
+- May contain implementation errors or vulnerabilities
+
+## Rationale
+
+For years, I've used password managers, which got me curious about how they work under the hood. And to me the best way to truly understand something is to actually build it. So I created this library to:
+
+1. Understand the model: how do Secret Keys, Keysets and Vaults work together?
+1. Share knowledge: an interactive demo helps others learn too
 
 ## Contributing
 
