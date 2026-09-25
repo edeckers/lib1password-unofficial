@@ -17,6 +17,23 @@
 
 > ⚠️ Educational and unaudited: don't use it to protect real secrets. The 1Password team greenlit its publication, but neither this library nor the explainer is an official product developed or maintained by AgileBits, Inc. See [Disclaimers](#disclaimers).
 
+## How it works
+
+```mermaid
+flowchart TD
+  password["Account Password"] -->|"trim + NFKD normalization"| pbkdf2["PBKDF2-HMAC-SHA256<br/>650,000 iterations"]
+  salt["Salt + email address"] -->|"HKDF-SHA256"| pbkdf2
+  secretKey["Secret Key<br/>(never leaves your device)"] -->|"HKDF-SHA256"| xor(("XOR"))
+  pbkdf2 --> xor
+  xor --> auk["Account Unlock Key (AUK)"]
+  auk -->|"decrypts (AES-256-GCM)"| symKey["Master keyset:<br/>symmetric key"]
+  symKey -->|"decrypts (AES-256-GCM)"| priKey["Master keyset:<br/>RSA-OAEP private key"]
+  priKey -->|"decrypts (RSA-OAEP)"| vaultKey["Vault key"]
+  vaultKey -->|"decrypts (AES-256-GCM)"| items["Vault items"]
+```
+
+Everything from the master keyset down is stored on the server, encrypted. The Account Unlock Key is never stored or sent anywhere: your device derives it from your password _and_ your Secret Key, 128 bits of randomness generated on your device. Someone who steals the server's data can't brute-force your password to decrypt it, because without the Secret Key every password guess is also a guess at those 128 random bits.
+
 ## Installation
 
 ```bash
