@@ -1,7 +1,7 @@
 import { AccountCreator } from "~/lib/Account/AccountCreator";
 import { RegistrationInfo } from "~/lib/Account/RegistrationInfo";
 import { ENCRYPTED_ITEM_DEFAULT_CTY } from "~/Consts";
-import { base64encode, stringToArrayBuffer } from "~/lib/Encoding";
+import { base64encode, stringToBytes } from "~/lib/Encoding";
 import {
   encryptSymmetric,
   exportCryptoKeyAsJwk,
@@ -11,15 +11,19 @@ import { InMemoryAccountRepository } from "~/lib/Example/InMemoryAccountReposito
 import { InMemoryVaultRepository } from "~/lib/Example/InMemoryVaultRepository";
 import { Keyset, KeysetResponse } from "~/lib/Keysets/Entities";
 import { KeysetDecryptor } from "~/lib/Keysets/KeysetDecryptor";
-import { AsymEncryptedData, VaultInfo } from "~/lib/Vault/Entities";
+import {
+  AsymEncryptedData,
+  KeyWithMeta,
+  VaultInfo,
+} from "~/lib/Vault/Entities";
 import { Vault } from "~/lib/Vault/Vault";
 import { Fixtures } from "./fixtures";
 
 type Generated = { response: KeysetResponse; keyset: Keyset };
 
-const sealToPublicKey = async (
-  publicKey: { kid: string; k: CryptoKey },
-  plaintext: object,
+const sealKey = async (
+  publicKey: KeyWithMeta,
+  key: KeyWithMeta,
 ): Promise<AsymEncryptedData> => ({
   kid: publicKey.kid,
   enc: "RSA-OAEP",
@@ -29,7 +33,12 @@ const sealToPublicKey = async (
       await crypto.subtle.encrypt(
         { name: "RSA-OAEP" },
         publicKey.k,
-        stringToArrayBuffer(JSON.stringify(plaintext)),
+        stringToBytes(
+          JSON.stringify({
+            ...(await exportCryptoKeyAsJwk(key.k)),
+            kid: key.kid,
+          }),
+        ),
       ),
     ),
   ),
@@ -53,13 +62,10 @@ const sealedTo = async (parent: Generated): Promise<Generated> => {
     response: {
       uuid,
       encryptedBy: parent.response.uuid,
-      encSymKey: await sealToPublicKey(
-        { kid: parent.response.uuid, k: parent.keyset.pub.k },
-        await exportCryptoKeyAsJwk(sym.k),
-      ),
+      encSymKey: await sealKey(parent.keyset.pub, { kid: uuid, k: sym.k }),
       encPriKey: await encryptSymmetric(
         { kid: uuid, k: sym.k },
-        stringToArrayBuffer(
+        stringToBytes(
           JSON.stringify(await exportCryptoKeyAsJwk(pair.privateKey)),
         ),
       ),
@@ -81,15 +87,12 @@ const vaultSharedWith = async (owner: Generated): Promise<VaultInfo> => {
     type: "U",
     encAttrs: await encryptSymmetric(
       vaultKey,
-      stringToArrayBuffer(JSON.stringify({ name: "Shared" })),
+      stringToBytes(JSON.stringify({ name: "Shared" })),
     ),
     access: [
       {
         encryptedBy: owner.response.uuid,
-        encVaultKey: await sealToPublicKey(
-          { kid: owner.response.uuid, k: owner.keyset.pub.k },
-          { ...(await exportCryptoKeyAsJwk(vaultKey.k)), kid: vaultKey.kid },
-        ),
+        encVaultKey: await sealKey(owner.keyset.pub, vaultKey),
       },
     ],
   };
