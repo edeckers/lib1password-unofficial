@@ -19,15 +19,17 @@ export class EncryptedKeyset {
   ): Promise<{ keyring: Keyring; keyset: Keyset }> => {
     const { uuid, encSymKey, encPriKey, pubKey } = this.keyset;
 
+    const symKeyBytes = await keyring.open(encSymKey);
     const symKey = await importCryptoKeyFromJwk(
-      JSON.parse(arrayBufferToString(await keyring.open(encSymKey))),
+      JSON.parse(arrayBufferToString(symKeyBytes)),
       true,
     );
     const withSymKey = keyring.withSymmetricKey(uuid, symKey);
 
+    const priKeyBytes = await withSymKey.open(encPriKey);
     const priKey = await crypto.subtle.importKey(
       "jwk",
-      JSON.parse(arrayBufferToString(await withSymKey.open(encPriKey))),
+      JSON.parse(arrayBufferToString(priKeyBytes)),
       { name: "RSA-OAEP", hash: "SHA-1" },
       true,
       ["decrypt"],

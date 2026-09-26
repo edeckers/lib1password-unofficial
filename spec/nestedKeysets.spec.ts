@@ -24,25 +24,21 @@ type Generated = { response: KeysetResponse; keyset: Keyset };
 const sealKey = async (
   publicKey: KeyWithMeta,
   key: KeyWithMeta,
-): Promise<AsymEncryptedData> => ({
-  kid: publicKey.kid,
-  enc: "RSA-OAEP",
-  cty: ENCRYPTED_ITEM_DEFAULT_CTY,
-  data: base64encode(
-    new Uint8Array(
-      await crypto.subtle.encrypt(
-        { name: "RSA-OAEP" },
-        publicKey.k,
-        stringToBytes(
-          JSON.stringify({
-            ...(await exportCryptoKeyAsJwk(key.k)),
-            kid: key.kid,
-          }),
-        ),
-      ),
-    ),
-  ),
-});
+): Promise<AsymEncryptedData> => {
+  const jwk = await exportCryptoKeyAsJwk(key.k);
+  const sealed = await crypto.subtle.encrypt(
+    { name: "RSA-OAEP" },
+    publicKey.k,
+    stringToBytes(JSON.stringify({ ...jwk, kid: key.kid })),
+  );
+
+  return {
+    kid: publicKey.kid,
+    enc: "RSA-OAEP",
+    cty: ENCRYPTED_ITEM_DEFAULT_CTY,
+    data: base64encode(new Uint8Array(sealed)),
+  };
+};
 
 const sealedTo = async (parent: Generated): Promise<Generated> => {
   const uuid = crypto.randomUUID();
@@ -57,19 +53,21 @@ const sealedTo = async (parent: Generated): Promise<Generated> => {
     ["encrypt", "decrypt"],
   );
   const sym = await generateSymKey();
+  const encSymKey = await sealKey(parent.keyset.pub, { kid: uuid, k: sym.k });
+  const priJwk = await exportCryptoKeyAsJwk(pair.privateKey);
+  const encPriKey = await encryptSymmetric(
+    { kid: uuid, k: sym.k },
+    stringToBytes(JSON.stringify(priJwk)),
+  );
+  const pubJwk = await exportCryptoKeyAsJwk(pair.publicKey);
 
   return {
     response: {
       uuid,
       encryptedBy: parent.response.uuid,
-      encSymKey: await sealKey(parent.keyset.pub, { kid: uuid, k: sym.k }),
-      encPriKey: await encryptSymmetric(
-        { kid: uuid, k: sym.k },
-        stringToBytes(
-          JSON.stringify(await exportCryptoKeyAsJwk(pair.privateKey)),
-        ),
-      ),
-      pubKey: { ...(await exportCryptoKeyAsJwk(pair.publicKey)), kid: uuid },
+      encSymKey,
+      encPriKey,
+      pubKey: { ...pubJwk, kid: uuid },
     },
     keyset: {
       sym: { kid: uuid, k: sym.k },
@@ -81,20 +79,17 @@ const sealedTo = async (parent: Generated): Promise<Generated> => {
 
 const vaultSharedWith = async (owner: Generated): Promise<VaultInfo> => {
   const vaultKey = await generateSymKey();
+  const encAttrs = await encryptSymmetric(
+    vaultKey,
+    stringToBytes(JSON.stringify({ name: "Shared" })),
+  );
+  const encVaultKey = await sealKey(owner.keyset.pub, vaultKey);
 
   return {
     uuid: crypto.randomUUID(),
     type: "U",
-    encAttrs: await encryptSymmetric(
-      vaultKey,
-      stringToBytes(JSON.stringify({ name: "Shared" })),
-    ),
-    access: [
-      {
-        encryptedBy: owner.response.uuid,
-        encVaultKey: await sealKey(owner.keyset.pub, vaultKey),
-      },
-    ],
+    encAttrs,
+    access: [{ encryptedBy: owner.response.uuid, encVaultKey }],
   };
 };
 

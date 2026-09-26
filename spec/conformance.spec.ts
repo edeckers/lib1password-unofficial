@@ -14,7 +14,9 @@ const keyFor = async (password: string) => {
   );
   const derived = await auk.derive(1_000, salt);
 
-  return (await exportCryptoKeyAsJwk(derived)).k;
+  const jwk = await exportCryptoKeyAsJwk(derived);
+
+  return jwk.k;
 };
 
 describe("Passwords", () => {
