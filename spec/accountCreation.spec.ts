@@ -4,7 +4,7 @@ import { InMemoryAccountRepository } from "~/lib/Example/InMemoryAccountReposito
 import { InMemoryVaultRepository } from "~/lib/Example/InMemoryVaultRepository";
 import { Vault } from "~/lib/Vault/Vault";
 import { KeysetDecryptor } from "~/lib/Keysets/KeysetDecryptor";
-import { arrayBufferToString, stringToArrayBuffer } from "~/lib/Encoding";
+import { arrayBufferToString, stringToBytes } from "~/lib/Encoding";
 import { Fixtures } from "./fixtures";
 
 describe("Account creation", () => {
@@ -124,7 +124,7 @@ describe("Account creation", () => {
       // Act
       await vault.writeItem(
         anyVaultItemId,
-        stringToArrayBuffer(testSensitiveData)
+        stringToBytes(testSensitiveData)
       );
 
       // Assert
@@ -167,7 +167,7 @@ describe("Account creation", () => {
       // Act
       await vault.writeItem(
         anyVaultItemId,
-        stringToArrayBuffer(testSensitiveData)
+        stringToBytes(testSensitiveData)
       );
 
       // Assert

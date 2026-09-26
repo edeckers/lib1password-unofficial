@@ -3,7 +3,7 @@ import { AccountRepository } from "~/lib/Account/AccountRepository";
 import { KeysetResponse } from "~/lib/Keysets/Entities";
 import { Profile } from "~/lib/Profile/Entities";
 import { createProfile } from "~/lib/Profile/ProfileRepository";
-import { stringToArrayBuffer } from "~/lib/Encoding";
+import { stringToBytes } from "~/lib/Encoding";
 
 const createProfileId = async (
   vaultId: string,
@@ -12,7 +12,7 @@ const createProfileId = async (
 ) => {
   const emailHashBytes = await crypto.subtle.digest(
     "SHA-256",
-    stringToArrayBuffer(emailAddress),
+    stringToBytes(emailAddress),
   );
   const emailHash = toHexString(new Uint8Array(emailHashBytes));
 

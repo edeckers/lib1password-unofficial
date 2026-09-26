@@ -13,7 +13,7 @@ import {
   generateSalt,
   generateSymKey,
 } from "~/lib/Encryption";
-import { base64encode, stringToArrayBuffer } from "~/lib/Encoding";
+import { base64encode, stringToBytes } from "~/lib/Encoding";
 import { KeysetDecryptor } from "~/lib/Keysets/KeysetDecryptor";
 import { ProfileRepository } from "~/lib/Profile/ProfileRepository";
 import { KeyWithMeta, AsymEncryptedData } from "~/lib/Vault/Entities";
@@ -55,7 +55,7 @@ const encryptVaultKey = async (
 ): Promise<AsymEncryptedData> => {
   const vaultJwk = await exportCryptoKeyAsJwk(vaultKey.k);
 
-  const vaultJwkBytes = stringToArrayBuffer(
+  const vaultJwkBytes = stringToBytes(
     JSON.stringify({
       ...vaultJwk,
       kid: vaultKey.kid,
@@ -100,7 +100,7 @@ const generateEncryptedMasterSymKey = async (
   const symKeyEncryptedBytes = await crypto.subtle.encrypt(
     { name: SYMMETRIC_KEY_ENCRYPTION_ALGORITHM, iv },
     auk,
-    stringToArrayBuffer(JSON.stringify(symKeyJwk)),
+    stringToBytes(JSON.stringify(symKeyJwk)),
   );
   const symKeyEncryptedJson = base64encode(
     new Uint8Array(symKeyEncryptedBytes),
@@ -138,7 +138,7 @@ const generateMasterKeyset = async (
   const priKeyEncryptedBytes = await crypto.subtle.encrypt(
     { name: SYMMETRIC_KEY_ENCRYPTION_ALGORITHM, iv },
     mp.k,
-    stringToArrayBuffer(JSON.stringify(priKeyJwk)),
+    stringToBytes(JSON.stringify(priKeyJwk)),
   );
 
   const priKeyEncryptedJson = base64encode(
@@ -218,7 +218,7 @@ export class AccountCreator {
     logger.info("Creating Personalt Vault Attributes");
     const encAttrs = await encryptSymmetric(
       vaultKey,
-      stringToArrayBuffer(JSON.stringify({ name: "My Vault" })),
+      stringToBytes(JSON.stringify({ name: "My Vault" })),
     );
     logger.info("Created Personalt Vault Attributes");
 

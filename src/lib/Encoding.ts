@@ -40,7 +40,16 @@ const base64decode = (base64: string) => {
 const enc = new TextEncoder();
 const dec = new TextDecoder();
 
-const stringToArrayBuffer = (message: string) => enc.encode(message);
+const stringToBytes = (message: string) => enc.encode(message);
 const arrayBufferToString = (buffer: ArrayBuffer) => dec.decode(buffer);
 
-export { base64encode, base64decode, stringToArrayBuffer, arrayBufferToString };
+/** @deprecated Use {@link stringToBytes}; this has always returned a `Uint8Array`. */
+const stringToArrayBuffer = stringToBytes;
+
+export {
+  base64encode,
+  base64decode,
+  stringToBytes,
+  stringToArrayBuffer,
+  arrayBufferToString,
+};

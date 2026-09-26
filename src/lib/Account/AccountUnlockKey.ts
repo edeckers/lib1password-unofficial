@@ -1,7 +1,7 @@
 import { SYMMETRIC_KEY_ENCRYPTION_ALGORITHM } from "~/Consts";
 import { SecretKey } from "~/lib/Account/SecretKey";
 import { assert, assertHasValue } from "~/lib/Utils";
-import { stringToArrayBuffer } from "~/lib/Encoding";
+import { stringToBytes } from "~/lib/Encoding";
 
 // "[normalize] to a UTF-8 byte string using Unicode Normalization
 // Form Compatibility Decomposition (NFKD) normalization." (1Password White Paper)
@@ -22,7 +22,7 @@ const xorArrays = (maybeA0: Uint8Array, maybeA1: Uint8Array) => {
 const saltTheSecretKey = async (secretKey: SecretKey) => {
   const hkdfKey = await crypto.subtle.importKey(
     "raw",
-    stringToArrayBuffer(secretKey.secret),
+    stringToBytes(secretKey.secret),
     {
       name: "HKDF",
     },
@@ -33,9 +33,9 @@ const saltTheSecretKey = async (secretKey: SecretKey) => {
   return await crypto.subtle.deriveBits(
     {
       name: "HKDF",
-      salt: stringToArrayBuffer(secretKey.accountId),
+      salt: stringToBytes(secretKey.accountId),
       hash: "SHA-256",
-      info: stringToArrayBuffer(secretKey.version),
+      info: stringToBytes(secretKey.version),
     },
     hkdfKey,
     256,
@@ -59,9 +59,9 @@ const saltTheMasterKeySalt = async (
   return await crypto.subtle.deriveBits(
     {
       name: "HKDF",
-      salt: stringToArrayBuffer(emailAddress),
+      salt: stringToBytes(emailAddress),
       hash: "SHA-256",
-      info: stringToArrayBuffer("PBES2g-HS256"),
+      info: stringToBytes("PBES2g-HS256"),
     },
     hkdfKey,
     256,
@@ -73,7 +73,7 @@ const createPbkdf2Key = async (password: string) => {
 
   return await crypto.subtle.importKey(
     "raw",
-    stringToArrayBuffer(normalizedPassword),
+    stringToBytes(normalizedPassword),
     { name: "PBKDF2" },
     false,
     ["deriveBits"],
@@ -97,7 +97,7 @@ export class AccountUnlockKey {
         salt,
         hash: "SHA-256",
         iterations,
-        info: stringToArrayBuffer("PBES2g-HS256"),
+        info: stringToBytes("PBES2g-HS256"),
       },
       this.pbkdf2Key,
       256,

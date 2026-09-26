@@ -1,6 +1,6 @@
 import { assert, toHexString } from "~/lib/Utils";
 import { EncryptedVaultItem } from "~/lib/Vault/Entities";
-import { arrayBufferToString, stringToArrayBuffer } from "~/lib/Encoding";
+import { arrayBufferToString, stringToBytes } from "~/lib/Encoding";
 import { SYMMETRIC_KEY_ENCRYPTION_ALGORITHM } from "~/Consts";
 import { decryptSymmetric, encryptSymmetric } from "~/lib/Encryption";
 
@@ -30,7 +30,7 @@ const sanitizeSecret = (rawSecret: Uint8Array<ArrayBuffer>) => {
 const generateSecretKeyObfuscationKey = async () => {
   const secretKeyObfuscationKey160bits = await crypto.subtle.digest(
     "SHA-1",
-    stringToArrayBuffer(
+    stringToBytes(
       // Pulled from the code on the 1Password site
       "Obfuscation Does Not Provide Security But It Doesn't Hurt",
     ),
@@ -39,7 +39,7 @@ const generateSecretKeyObfuscationKey = async () => {
     secretKeyObfuscationKey160bits.slice(0, 16),
   );
   const secretBitsAsHex = toHexString(secretObfuscationKey128bits);
-  const secretHexAsBytes = stringToArrayBuffer(secretBitsAsHex);
+  const secretHexAsBytes = stringToBytes(secretBitsAsHex);
 
   return await crypto.subtle.importKey(
     "raw",
@@ -157,15 +157,12 @@ export class SecretKey {
 
     const obfKey = { kid, k };
 
-    return await encryptSymmetric(
-      obfKey,
-      stringToArrayBuffer(this.fullWithDashes),
-    );
+    return await encryptSymmetric(obfKey, stringToBytes(this.fullWithDashes));
   };
 
   public static fromReadableString = (value: string): SecretKey =>
     SecretKey.secretKeyFromData(
-      stringToArrayBuffer(value.replaceAll("-", "").trim()),
+      stringToBytes(value.replaceAll("-", "").trim()),
     );
 
   public static fromObfuscated = async (value: EncryptedVaultItem) => {
@@ -179,7 +176,7 @@ export class SecretKey {
   public static generate = () =>
     SecretKey.secretKeyFromData(
       concat([
-        stringToArrayBuffer(VERSION),
+        stringToBytes(VERSION),
         generateRandomArrayOfAlphaNumValues(SECRET_KEY_RANDOM_NUMBER_OF_BYTES),
       ]),
     );
@@ -187,8 +184,8 @@ export class SecretKey {
   public rotate = (): SecretKey =>
     SecretKey.secretKeyFromData(
       concat([
-        stringToArrayBuffer(this.version),
-        stringToArrayBuffer(this.accountId),
+        stringToBytes(this.version),
+        stringToBytes(this.accountId),
         generateRandomArrayOfAlphaNumValues(
           SECRET_KEY_RANDOM_NUMBER_OF_BYTES - SECRET_KEY_ID_LENGTH_IN_BYTES,
         ),

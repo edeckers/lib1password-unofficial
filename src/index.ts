@@ -38,5 +38,6 @@ export {
   base64encode,
   base64decode,
   arrayBufferToString,
+  stringToBytes,
   stringToArrayBuffer,
 } from "~/lib/Encoding";

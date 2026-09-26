@@ -5,11 +5,7 @@ import { KeysetDecryptor } from "~/lib/Keysets/KeysetDecryptor";
 import { isPasswordEncrypted } from "~/lib/Keysets/Entities";
 import { Vault } from "~/lib/Vault/Vault";
 import { VaultRepository } from "~/lib/Vault/VaultRepository";
-import {
-  base64decode,
-  base64encode,
-  stringToArrayBuffer,
-} from "~/lib/Encoding";
+import { base64decode, base64encode, stringToBytes } from "~/lib/Encoding";
 import { exportCryptoKeyAsJwk, generateIV } from "~/lib/Encryption";
 import { SYMMETRIC_KEY_ENCRYPTION_ALGORITHM } from "~/Consts";
 
@@ -57,7 +53,7 @@ class Rekeyer {
     const encryptedSymKeyBytes = await crypto.subtle.encrypt(
       { name: SYMMETRIC_KEY_ENCRYPTION_ALGORITHM, iv },
       newDerivedKey,
-      stringToArrayBuffer(JSON.stringify(symKeyJwk)),
+      stringToBytes(JSON.stringify(symKeyJwk)),
     );
 
     const updatedMasterKeyset = {
