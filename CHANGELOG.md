@@ -1,3 +1,10 @@
+# [3.1.0](https://github.com/edeckers/lib1password-unofficial/compare/v3.0.0...v3.1.0) (2026-09-26)
+
+
+### Features
+
+* name stringToBytes after what it returns ([5b20459](https://github.com/edeckers/lib1password-unofficial/commit/5b204595e67db1392282e69b9821c2c31ca139cd))
+
 # [3.0.0](https://github.com/edeckers/lib1password-unofficial/compare/v2.1.0...v3.0.0) (2026-09-25)
 
 
